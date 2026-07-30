@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDateTime;
+
 /**
  * Specifications da {@link Pauta}, uma por campo.
  * Mantidas separadas para permitir compor filtros (and/or) sem precisar de um método por combinação.
@@ -15,5 +17,15 @@ public final class PautaSpecifications {
     /** Filtra pelo código público da pauta. */
     public static Specification<Pauta> comCodigo(String codigo) {
         return (root, query, cb) -> cb.equal(root.get("codigo"), codigo);
+    }
+
+    /** Filtra pela data de criação maior que a informada. */
+    public static Specification<Pauta> comDataCriacaoMaiorQue(LocalDateTime dataCriacao) {
+        return (root, query, cb) -> cb.greaterThan(root.get("dataCriacao"), dataCriacao);
+    }
+
+    /** Filtra pela data de criação menor que a informada. */
+    public static Specification<Pauta> comDataCriacaoMenorQue(LocalDateTime dataCriacao) {
+        return (root, query, cb) -> cb.lessThan(root.get("dataCriacao"), dataCriacao);
     }
 }

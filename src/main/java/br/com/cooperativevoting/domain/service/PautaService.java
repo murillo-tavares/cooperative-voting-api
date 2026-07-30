@@ -5,11 +5,14 @@ import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.repository.PautaRepository;
 import br.com.cooperativevoting.domain.specification.PautaSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +35,11 @@ public class PautaService {
     /** Lista todas as pautas não excluídas. */
     public List<Pauta> listar() {
         return pautaRepository.findAll();
+    }
+
+    /** Lista pautas utilizando paginação e uma specification já resolvida. */
+    public Page<Pauta> listar(Pageable pageable, Specification<Pauta> specification) {
+        return pautaRepository.findAll(specification, pageable);
     }
 
     /** Busca uma pauta pelo código. Lança 404 se não existir. */
