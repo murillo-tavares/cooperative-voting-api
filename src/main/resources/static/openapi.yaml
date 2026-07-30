@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Cooperative Voting API
   description: API de votação cooperativa. Gerencia pautas submetidas à assembleia.
-  version: "0.0.1"
+  version: "1.0.0"
 
 servers:
   - url: /
