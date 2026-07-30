@@ -1,6 +1,7 @@
 package br.com.cooperativevoting.api.controller;
 
 import br.com.cooperativevoting.api.dto.request.PautaRequest;
+import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.support.fixture.PautaTestDataFactory;
 import br.com.cooperativevoting.support.suite.IntegrationTest;
@@ -75,7 +76,8 @@ class PautaControllerIT extends IntegrationTest {
     @Test
     void deveRetornar404AoBuscarPautaInexistente() throws Exception {
         mockMvc.perform(get("/pautas/{codigo}", "pt_inexistente"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 
     // ---- listar ----
@@ -123,7 +125,8 @@ class PautaControllerIT extends IntegrationTest {
         mockMvc.perform(put("/pautas/{codigo}", "pt_inexistente")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 
     // ---- excluir ----
@@ -136,12 +139,14 @@ class PautaControllerIT extends IntegrationTest {
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/pautas/{codigo}", pauta.getCodigo()))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 
     @Test
     void deveRetornar404AoExcluirPautaInexistente() throws Exception {
         mockMvc.perform(delete("/pautas/{codigo}", "pt_inexistente"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 }

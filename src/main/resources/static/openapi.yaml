@@ -219,6 +219,11 @@ components:
           type: integer
         error:
           type: string
+        codigo:
+          type: string
+          description: Código do erro de negócio (catálogo interno). Ausente em erros de framework/validação.
+          nullable: true
+          example: PAUTA_NAO_ENCONTRADA
         message:
           type: string
         path:

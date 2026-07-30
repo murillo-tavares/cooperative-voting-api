@@ -1,5 +1,6 @@
 package br.com.cooperativevoting.domain.service;
 
+import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
 import br.com.cooperativevoting.domain.mapper.PautaUpdateMapper;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.repository.PautaRepository;
@@ -8,11 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +44,7 @@ public class PautaService {
     public Pauta buscarPorCodigo(String codigo) {
         Specification<Pauta> specification = PautaSpecifications.comCodigo(codigo);
         Optional<Pauta> pautaEncontrada = pautaRepository.findOne(specification);
-        return pautaEncontrada.orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pauta não encontrada: " + codigo));
+        return pautaEncontrada.orElseThrow(() -> PautaNaoEncontradaException.codigo(codigo));
     }
 
     /** Atualiza título e descrição de uma pauta existente. */

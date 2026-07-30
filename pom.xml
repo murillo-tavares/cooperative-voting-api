@@ -55,6 +55,13 @@
 			<artifactId>spring-boot-starter-kafka</artifactId>
 		</dependency>
 
+		<!-- Tratamento de erro -->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<!-- Banco de dados -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
