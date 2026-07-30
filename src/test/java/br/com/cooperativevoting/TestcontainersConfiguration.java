@@ -1,4 +1,4 @@
-package br.com.cooperativevoting.api;
+package br.com.cooperativevoting;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
