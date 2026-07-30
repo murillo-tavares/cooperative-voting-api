@@ -23,11 +23,6 @@ import java.time.LocalDateTime;
 
 /**
  * Pauta submetida para votação em assembleia.
- * <p>
- * {@code id} é interno (chave técnica); a API e os DTOs trabalham só com {@code codigo}.
- * <p>
- * Exclusão é lógica (soft delete): {@code delete} vira um UPDATE que preenche
- * {@code dataExclusao}, e toda consulta já ignora os registros excluídos.
  */
 @Entity
 @Table(name = "pauta")
@@ -44,6 +39,7 @@ public class Pauta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** {@code id} é interno (chave técnica); a API e os DTOs trabalham só com {@code codigo}. */
     @Column(nullable = false, unique = true, updatable = false, length = 20)
     private String codigo;
 
@@ -61,6 +57,10 @@ public class Pauta {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
+    /**
+     * Exclusão é lógica (soft delete): {@code delete} vira um UPDATE que preenche este campo,
+     * e toda consulta já ignora os registros excluídos.
+     */
     @Column(name = "data_exclusao")
     private LocalDateTime dataExclusao;
 
