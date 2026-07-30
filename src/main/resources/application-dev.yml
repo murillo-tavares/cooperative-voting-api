@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: cooperative-voting-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cooperative_voting
+    username: cooperative_voting
+    password: cooperative_voting
+  kafka:
+    bootstrap-servers: localhost:9092
