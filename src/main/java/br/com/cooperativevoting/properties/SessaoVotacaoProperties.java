@@ -1,4 +1,4 @@
-package br.com.cooperativevoting.config;
+package br.com.cooperativevoting.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;

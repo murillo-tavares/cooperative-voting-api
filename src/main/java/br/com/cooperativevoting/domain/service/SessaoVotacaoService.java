@@ -1,10 +1,10 @@
 package br.com.cooperativevoting.domain.service;
 
-import br.com.cooperativevoting.config.SessaoVotacaoProperties;
 import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationTranslator;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
 import br.com.cooperativevoting.domain.repository.SessaoVotacaoRepository;
+import br.com.cooperativevoting.properties.SessaoVotacaoProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
