@@ -72,8 +72,9 @@ public class PautaController {
     /** Atualiza uma pauta existente. */
     @PutMapping("/{codigo}")
     public PautaResponse atualizar(@PathVariable String codigo, @Valid @RequestBody PautaRequest request) {
+        Pauta pauta = pautaService.buscarPorCodigo(codigo);
         Pauta dadosAtualizados = pautaMapper.toEntity(request);
-        Pauta pautaAtualizada = pautaService.atualizar(codigo, dadosAtualizados);
+        Pauta pautaAtualizada = pautaService.atualizar(pauta, dadosAtualizados);
         return pautaMapper.toResponse(pautaAtualizada);
     }
 

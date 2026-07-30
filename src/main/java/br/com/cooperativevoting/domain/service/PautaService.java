@@ -48,8 +48,7 @@ public class PautaService {
     }
 
     /** Atualiza título e descrição de uma pauta existente. */
-    public Pauta atualizar(String codigo, Pauta dadosAtualizados) {
-        Pauta pauta = buscarPorCodigo(codigo);
+    public Pauta atualizar(Pauta pauta, Pauta dadosAtualizados) {
         pautaUpdateMapper.atualizarCampos(pauta, dadosAtualizados);
         return pautaRepository.save(pauta);
     }
