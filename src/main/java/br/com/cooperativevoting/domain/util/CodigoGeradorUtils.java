@@ -13,7 +13,8 @@ import java.util.UUID;
 public final class CodigoGeradorUtils {
 
     public static String gerar(String prefixo) {
+        String prefixoSeguro = prefixo == null ? "" : prefixo;
         String sufixo = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-        return prefixo + sufixo;
+        return prefixoSeguro + sufixo;
     }
 }
