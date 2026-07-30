@@ -1,0 +1,240 @@
+openapi: 3.0.3
+info:
+  title: Cooperative Voting API
+  description: API de votação cooperativa. Gerencia pautas submetidas à assembleia.
+  version: "0.0.1"
+
+servers:
+  - url: /
+
+tags:
+  - name: Pauta
+    description: Cadastro e consulta de pautas de votação
+
+paths:
+  /pautas:
+    post:
+      tags: [Pauta]
+      summary: Cadastra uma nova pauta
+      operationId: criarPauta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PautaRequest"
+      responses:
+        "201":
+          description: Pauta criada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PautaResponse"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErroValidacao"
+    get:
+      tags: [Pauta]
+      summary: Lista pautas com paginação e filtros por data de criação
+      operationId: listarPautas
+      parameters:
+        - name: page
+          in: query
+          description: Número da página (0-indexed)
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Tamanho da página
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: "Campo e direção de ordenação, ex.: dataCriacao,desc"
+          schema:
+            type: string
+        - name: dataCriacaoMaior
+          in: query
+          description: Filtra pautas criadas após esta data
+          schema:
+            type: string
+            format: date-time
+        - name: dataCriacaoMenor
+          in: query
+          description: Filtra pautas criadas antes desta data
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Página de pautas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PautaPage"
+
+  /pautas/{codigo}:
+    get:
+      tags: [Pauta]
+      summary: Busca uma pauta pelo código
+      operationId: buscarPautaPorCodigo
+      parameters:
+        - $ref: "#/components/parameters/CodigoPauta"
+      responses:
+        "200":
+          description: Pauta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PautaResponse"
+        "404":
+          description: Pauta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    put:
+      tags: [Pauta]
+      summary: Atualiza uma pauta existente
+      operationId: atualizarPauta
+      parameters:
+        - $ref: "#/components/parameters/CodigoPauta"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PautaRequest"
+      responses:
+        "200":
+          description: Pauta atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PautaResponse"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErroValidacao"
+        "404":
+          description: Pauta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    delete:
+      tags: [Pauta]
+      summary: Exclui (logicamente) uma pauta existente
+      operationId: excluirPauta
+      parameters:
+        - $ref: "#/components/parameters/CodigoPauta"
+      responses:
+        "204":
+          description: Pauta excluída
+        "404":
+          description: Pauta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
+components:
+  parameters:
+    CodigoPauta:
+      name: codigo
+      in: path
+      required: true
+      description: Código público da pauta
+      schema:
+        type: string
+      example: pt_9f3ka2x1
+
+  schemas:
+    PautaRequest:
+      type: object
+      required: [titulo]
+      properties:
+        titulo:
+          type: string
+          maxLength: 120
+          example: Alterar estatuto social
+        descricao:
+          type: string
+          maxLength: 500
+          example: Proposta de alteração do estatuto social da cooperativa
+
+    PautaResponse:
+      type: object
+      properties:
+        codigo:
+          type: string
+          example: pt_9f3ka2x1
+        titulo:
+          type: string
+          example: Alterar estatuto social
+        descricao:
+          type: string
+          example: Proposta de alteração do estatuto social da cooperativa
+        dataCriacao:
+          type: string
+          format: date-time
+        dataAtualizacao:
+          type: string
+          format: date-time
+          nullable: true
+
+    PautaPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/PautaResponse"
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        number:
+          type: integer
+          description: Página atual (0-indexed)
+        size:
+          type: integer
+        first:
+          type: boolean
+        last:
+          type: boolean
+
+    Erro:
+      type: object
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+
+    ErroValidacao:
+      allOf:
+        - $ref: "#/components/schemas/Erro"
+        - type: object
+          properties:
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
