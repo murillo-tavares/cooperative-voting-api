@@ -1,5 +1,6 @@
 package br.com.cooperativevoting.domain.service;
 
+import br.com.cooperativevoting.domain.exception.SessaoVotacaoNaoEncontradaException;
 import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationTranslator;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
@@ -10,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Regras de negócio de abertura de sessão de votação.
@@ -52,5 +54,10 @@ public class SessaoVotacaoService {
         } catch (DataIntegrityViolationException exception) {
             throw constraintViolationTranslator.traduzir(exception);
         }
+    }
+
+    /** Busca uma sessão de votação pelo id. Lança 404 se não existir. */
+    public SessaoVotacao buscarPorId(UUID id) {
+        return sessaoVotacaoRepository.findById(id).orElseThrow(() -> SessaoVotacaoNaoEncontradaException.id(id));
     }
 }

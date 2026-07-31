@@ -36,11 +36,7 @@ public class SessaoVotacao {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    /**
-     * Sem {@code @ManyToOne}/{@code @OneToOne} para {@link Pauta}: usar o id evita o custo de
-     * mapear/hidratar a entidade relacionada (proxy, lazy loading, N+1) quando só o identificador
-     * é necessário. A constraint {@code UNIQUE(pauta_id)} no banco garante uma única sessão por pauta.
-     */
+    /** Sem relação JPA pra {@link Pauta}: evita proxy/lazy loading. Unicidade: {@code UNIQUE(pauta_id)}. */
     @Column(name = "pauta_id", nullable = false, updatable = false)
     private UUID pautaId;
 

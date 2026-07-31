@@ -2,6 +2,8 @@ package br.com.cooperativevoting.api.controller;
 
 import br.com.cooperativevoting.api.dto.request.SessaoVotacaoRequest;
 import br.com.cooperativevoting.api.dto.response.SessaoVotacaoResponse;
+import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
+import br.com.cooperativevoting.domain.exception.constraint.SessaoVotacaoJaAbertaException;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.support.fixture.PautaTestDataFactory;
 import br.com.cooperativevoting.support.suite.IntegrationTest;
@@ -88,7 +90,8 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
     @Test
     void naoDeveAbrirSessaoParaPautaInexistente() throws Exception {
         mockMvc.perform(post("/pautas/{pautaId}/sessoes", UUID.randomUUID()))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 
     @Test
@@ -99,6 +102,7 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId()))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.codigo").value(SessaoVotacaoJaAbertaException.CODIGO));
     }
 }

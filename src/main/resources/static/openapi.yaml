@@ -12,6 +12,8 @@ tags:
     description: Cadastro e consulta de pautas de votação
   - name: Sessão de Votação
     description: Abertura de sessões de votação em pautas
+  - name: Voto
+    description: Recebimento de votos numa sessão de votação
 
 paths:
   /pautas:
@@ -189,6 +191,51 @@ paths:
               schema:
                 $ref: "#/components/schemas/Erro"
 
+  /sessoes/{sessaoId}/votos:
+    post:
+      tags: [Voto]
+      summary: Registra o voto de um associado numa sessão de votação
+      operationId: registrarVoto
+      parameters:
+        - $ref: "#/components/parameters/IdSessao"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VotoRequest"
+      responses:
+        "201":
+          description: Voto registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VotoResponse"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErroValidacao"
+        "403":
+          description: Associado não apto a votar (consulta externa de aptidão)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "404":
+          description: Sessão de votação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "409":
+          description: Sessão encerrada, ou associado já votou nesta pauta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
 components:
   parameters:
     IdPauta:
@@ -196,6 +243,16 @@ components:
       in: path
       required: true
       description: Id (UUID) da pauta
+      schema:
+        type: string
+        format: uuid
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+    IdSessao:
+      name: sessaoId
+      in: path
+      required: true
+      description: Id (UUID) da sessão de votação
       schema:
         type: string
         format: uuid
@@ -301,6 +358,39 @@ components:
         status:
           type: string
           enum: [ABERTA, ENCERRADA]
+
+    VotoRequest:
+      type: object
+      required: [associadoId, opcao]
+      properties:
+        associadoId:
+          type: string
+          description: Identificador único do associado (ex.: CPF)
+          example: "52998224725"
+        opcao:
+          type: string
+          enum: [SIM, NAO]
+
+    VotoResponse:
+      type: object
+      properties:
+        pautaId:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        sessaoId:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        associadoId:
+          type: string
+          example: "52998224725"
+        opcao:
+          type: string
+          enum: [SIM, NAO]
+        dataVoto:
+          type: string
+          format: date-time
 
     ErroValidacao:
       allOf:
