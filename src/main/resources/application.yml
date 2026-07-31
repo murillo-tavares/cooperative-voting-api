@@ -1,7 +1,0 @@
-springdoc:
-  swagger-ui:
-    url: /openapi.yaml
-
-votacao:
-  sessao:
-    duracao-padrao-segundos: 60

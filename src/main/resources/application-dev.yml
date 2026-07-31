@@ -1,3 +1,7 @@
+springdoc:
+  swagger-ui:
+    url: /openapi.yaml
+
 spring:
   application:
     name: cooperative-voting-api
@@ -14,3 +18,13 @@ spring:
     error:
       include-message: always
       include-binding-errors: always
+
+votacao:
+  sessao:
+    duracao-padrao-segundos: 60
+
+integracao:
+  random-org:
+    base-url: "https://www.random.org/integers/?num=1&min=0&max=1&col=1&base=10&format=plain&rnd=new"
+    connect-timeout-millis: 2000
+    read-timeout-millis: 2000
