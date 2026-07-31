@@ -1,6 +1,7 @@
 package br.com.cooperativevoting.domain.service;
 
 import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
+import br.com.cooperativevoting.domain.filter.PautaFilter;
 import br.com.cooperativevoting.domain.mapper.PautaUpdateMapper;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.repository.PautaRepository;
@@ -35,9 +36,9 @@ public class PautaService {
         return pautaRepository.findAll();
     }
 
-    /** Lista pautas utilizando paginação e uma specification já resolvida. */
-    public Page<Pauta> listar(Pageable pageable, Specification<Pauta> specification) {
-        return pautaRepository.findAll(specification, pageable);
+    /** Lista pautas utilizando paginação e os filtros informados. */
+    public Page<Pauta> listar(Pageable pageable, PautaFilter filtro) {
+        return pautaRepository.findAll(filtro.toSpecification(), pageable);
     }
 
     /** Busca uma pauta pelo código. Lança 404 se não existir. */

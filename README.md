@@ -61,15 +61,13 @@ sabe traduzi-la. Nova constraint = nova implementação, sem tocar no tradutor.
 
 ### 🧩 Filtro + Specification
 
-[Filtros](src/main/java/br/com/cooperativevoting/domain/specification) ↗ de listagem chegam ao service como uma
-`Specification` composta, não um parâmetro por filtro. Cada campo filtrável vira um critério isolado e
-reaproveitável (ex.: `comDataCriacaoMaiorQue`, `comCodigo`), e o
-[SpecificationBuilder](src/main/java/br/com/cooperativevoting/domain/specification/SpecificationBuilder.java) ↗
-junta só os critérios presentes na requisição num único `AND`. Um filtro novo é só um critério novo — sem
-sobrecarga de método a cada combinação e sem amarrar o controller a uma query fixa.
+[Filtros](src/main/java/br/com/cooperativevoting/domain/filter) ↗ usam o framework `Specification` do Spring Data
+em vez de query fixa: cada campo filtrável é um critério isolado e reaproveitável em `PautaSpecifications`, e o
+`SpecificationBuilder` combina só os critérios presentes na requisição num único `AND`. Estender é fácil — um
+filtro novo é só mais um critério, sem afetar os existentes nem exigir um método por combinação.
 
-Adicionar um filtro é sempre dois passos: um método novo em `PautaSpecifications` e um `.addIfPresent(...)` novo
-na chamada do builder — nada existente muda.
+Adicionar um filtro é sempre três passos: um campo no record, um método novo em `PautaSpecifications` e um
+`.addIfPresent(...)` novo em `toSpecification()` — nada existente muda.
 
 <img src="docs/diagrams/specification-fluxo.svg" alt="Critérios de PautaSpecifications plugados na chain do SpecificationBuilder" width="900">
 
