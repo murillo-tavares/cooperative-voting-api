@@ -22,8 +22,11 @@ livre pra ser customizada sem precisar tocar em código Java.
 
 ## 🏷️ Versionamento
 
-Mudanças notáveis de cada versão ficam registradas no [CHANGELOG.md](CHANGELOG.md) ↗, seguindo o formato
-[Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) ↗ e [Semantic Versioning](https://semver.org/lang/pt-BR/) ↗.
+Cada versão publicada segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) ↗ e
+[Semantic Versioning](https://semver.org/lang/pt-BR/) ↗, com uma tag `vX.Y.Z` correspondente no repositório.
+
+- 📝 Changelog: [CHANGELOG.md](CHANGELOG.md) ↗
+- 🚀 Releases: [github.com/murillo-tavares/cooperative-voting-api/releases](https://github.com/murillo-tavares/cooperative-voting-api/releases) ↗
 
 ## 🏗️ Arquitetura
 
