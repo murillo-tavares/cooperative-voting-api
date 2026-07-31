@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +16,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import br.com.cooperativevoting.domain.util.CodigoGeradorUtils;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Pauta submetida para votação em assembleia.
@@ -35,13 +33,10 @@ import java.time.LocalDateTime;
 @Builder
 public class Pauta {
 
+    /** UUID gerado em memória (não sequencial, não adivinhável) — é o próprio identificador público. */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    /** {@code id} é interno (chave técnica); a API e os DTOs trabalham só com {@code codigo}. */
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
-    private String codigo;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, length = 120)
     private String titulo;
@@ -63,10 +58,4 @@ public class Pauta {
      */
     @Column(name = "data_exclusao")
     private LocalDateTime dataExclusao;
-
-    /** Gera o código público antes do insert; é interno à entidade porque só ela sabe seu prefixo. */
-    @PrePersist
-    public void prePersist() {
-        this.codigo = CodigoGeradorUtils.gerar("pt_");
-    }
 }

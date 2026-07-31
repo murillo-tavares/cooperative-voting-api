@@ -4,6 +4,7 @@ import br.com.cooperativevoting.api.dto.request.PautaRequest;
 import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.support.fixture.PautaTestDataFactory;
+import br.com.cooperativevoting.domain.util.RegexUtils;
 import br.com.cooperativevoting.support.suite.IntegrationTest;
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -45,7 +47,7 @@ class PautaControllerIT extends IntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.codigo", matchesPattern("^pt_[0-9a-f]{8}$")))
+                .andExpect(jsonPath("$.id", matchesPattern(RegexUtils.UUID_PATTERN)))
                 .andExpect(jsonPath("$.titulo").value("Alterar estatuto"))
                 .andExpect(jsonPath("$.descricao").value("Proposta de alteração do estatuto social"))
                 .andExpect(jsonPath("$.dataCriacao").exists());
@@ -61,21 +63,21 @@ class PautaControllerIT extends IntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // ---- buscar por código ----
+    // ---- buscar por id ----
 
     @Test
-    void deveBuscarPautaPorCodigo() throws Exception {
+    void deveBuscarPautaPorId() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
 
-        mockMvc.perform(get("/pautas/{codigo}", pauta.getCodigo()))
+        mockMvc.perform(get("/pautas/{id}", pauta.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.codigo").value(pauta.getCodigo()))
+                .andExpect(jsonPath("$.id").value(pauta.getId().toString()))
                 .andExpect(jsonPath("$.titulo").value(pauta.getTitulo()));
     }
 
     @Test
     void deveRetornar404AoBuscarPautaInexistente() throws Exception {
-        mockMvc.perform(get("/pautas/{codigo}", "pt_inexistente"))
+        mockMvc.perform(get("/pautas/{id}", UUID.randomUUID()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
@@ -109,11 +111,11 @@ class PautaControllerIT extends IntegrationTest {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         PautaRequest request = new PautaRequest("Título atualizado", "Descrição atualizada");
 
-        mockMvc.perform(put("/pautas/{codigo}", pauta.getCodigo())
+        mockMvc.perform(put("/pautas/{id}", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.codigo").value(pauta.getCodigo()))
+                .andExpect(jsonPath("$.id").value(pauta.getId().toString()))
                 .andExpect(jsonPath("$.titulo").value("Título atualizado"))
                 .andExpect(jsonPath("$.descricao").value("Descrição atualizada"));
     }
@@ -122,7 +124,7 @@ class PautaControllerIT extends IntegrationTest {
     void deveRetornar404AoAtualizarPautaInexistente() throws Exception {
         PautaRequest request = new PautaRequest("Título", "Descrição");
 
-        mockMvc.perform(put("/pautas/{codigo}", "pt_inexistente")
+        mockMvc.perform(put("/pautas/{id}", UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound())
@@ -135,17 +137,17 @@ class PautaControllerIT extends IntegrationTest {
     void deveExcluirPauta() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
 
-        mockMvc.perform(delete("/pautas/{codigo}", pauta.getCodigo()))
+        mockMvc.perform(delete("/pautas/{id}", pauta.getId()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/pautas/{codigo}", pauta.getCodigo()))
+        mockMvc.perform(get("/pautas/{id}", pauta.getId()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 
     @Test
     void deveRetornar404AoExcluirPautaInexistente() throws Exception {
-        mockMvc.perform(delete("/pautas/{codigo}", "pt_inexistente"))
+        mockMvc.perform(delete("/pautas/{id}", UUID.randomUUID()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }

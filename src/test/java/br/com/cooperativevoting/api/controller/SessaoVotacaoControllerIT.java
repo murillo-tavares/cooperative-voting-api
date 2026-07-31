@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,9 +43,9 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
     void deveAbrirSessaoComDuracaoPadraoQuandoSemCorpo() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
 
-        MvcResult resultado = mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", pauta.getCodigo()))
+        MvcResult resultado = mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId()))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.pautaCodigo").value(pauta.getCodigo()))
+                .andExpect(jsonPath("$.pautaId").value(pauta.getId().toString()))
                 .andExpect(jsonPath("$.status").value("ABERTA"))
                 .andExpect(jsonPath("$.dataAbertura").exists())
                 .andExpect(jsonPath("$.dataFechamento").exists())
@@ -61,7 +62,7 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacaoRequest request = new SessaoVotacaoRequest(120);
 
-        MvcResult resultado = mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", pauta.getCodigo())
+        MvcResult resultado = mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -78,7 +79,7 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacaoRequest request = new SessaoVotacaoRequest(0);
 
-        mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", pauta.getCodigo())
+        mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -86,7 +87,7 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
 
     @Test
     void naoDeveAbrirSessaoParaPautaInexistente() throws Exception {
-        mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", "pt_inexistente"))
+        mockMvc.perform(post("/pautas/{pautaId}/sessoes", UUID.randomUUID()))
                 .andExpect(status().isNotFound());
     }
 
@@ -94,10 +95,10 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
     void naoDeveAbrirSessaoDuplicadaParaMesmaPauta() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
 
-        mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", pauta.getCodigo()))
+        mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId()))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/pautas/{codigoPauta}/sessoes", pauta.getCodigo()))
+        mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId()))
                 .andExpect(status().isConflict());
     }
 }

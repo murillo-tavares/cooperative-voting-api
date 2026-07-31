@@ -1,12 +1,10 @@
 CREATE TABLE pauta (
-    id BIGSERIAL PRIMARY KEY,
-    codigo VARCHAR(20) NOT NULL,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     titulo VARCHAR(120) NOT NULL,
     descricao VARCHAR(500),
     data_criacao TIMESTAMP NOT NULL DEFAULT now(),
     data_atualizacao TIMESTAMP,
-    data_exclusao TIMESTAMP,
-    CONSTRAINT uk_pauta_codigo UNIQUE (codigo)
+    data_exclusao TIMESTAMP
 );
 
 -- Cobre o padrão de acesso mais comum: listar/consultar pautas não excluídas.

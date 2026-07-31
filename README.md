@@ -73,12 +73,6 @@ Adicionar um filtro é sempre três passos: um campo no record, um método novo 
 
 ### 🪪 Entidade
 
-#### `codigo` — identificador público
-
-Entidade expõe um `codigo` gerado como identificador público; o `id` técnico do banco fica interno. Desacopla a
-API da chave primária — o formato do código muda sem tocar em schema/chave estrangeira — e, por não ser
-sequencial, dificulta adivinhar registro de terceiro.
-
 #### `data_exclusao` — exclusão lógica
 
 Exclusão é lógica: um `UPDATE` que marca `data_exclusao`, não um `DELETE`. Mantém histórico pra auditoria e

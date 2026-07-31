@@ -14,7 +14,6 @@ import org.mapstruct.MappingTarget;
 public interface PautaUpdateMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "codigo", ignore = true)
     @Mapping(target = "dataCriacao", ignore = true)
     @Mapping(target = "dataAtualizacao", ignore = true)
     @Mapping(target = "dataExclusao", ignore = true)

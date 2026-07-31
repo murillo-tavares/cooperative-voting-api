@@ -80,13 +80,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/PautaPage"
 
-  /pautas/{codigo}:
+  /pautas/{id}:
     get:
       tags: [Pauta]
-      summary: Busca uma pauta pelo código
-      operationId: buscarPautaPorCodigo
+      summary: Busca uma pauta pelo id
+      operationId: buscarPautaPorId
       parameters:
-        - $ref: "#/components/parameters/CodigoPauta"
+        - $ref: "#/components/parameters/IdPauta"
       responses:
         "200":
           description: Pauta encontrada
@@ -105,7 +105,7 @@ paths:
       summary: Atualiza uma pauta existente
       operationId: atualizarPauta
       parameters:
-        - $ref: "#/components/parameters/CodigoPauta"
+        - $ref: "#/components/parameters/IdPauta"
       requestBody:
         required: true
         content:
@@ -136,7 +136,7 @@ paths:
       summary: Exclui (logicamente) uma pauta existente
       operationId: excluirPauta
       parameters:
-        - $ref: "#/components/parameters/CodigoPauta"
+        - $ref: "#/components/parameters/IdPauta"
       responses:
         "204":
           description: Pauta excluída
@@ -147,7 +147,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Erro"
 
-  /pautas/{codigo}/sessoes:
+  /pautas/{id}/sessoes:
     post:
       tags: [Sessão de Votação]
       summary: Abre uma sessão de votação para a pauta
@@ -156,7 +156,7 @@ paths:
         por 1 minuto. Só é permitida uma sessão por pauta.
       operationId: abrirSessaoVotacao
       parameters:
-        - $ref: "#/components/parameters/CodigoPauta"
+        - $ref: "#/components/parameters/IdPauta"
       requestBody:
         required: false
         content:
@@ -191,14 +191,15 @@ paths:
 
 components:
   parameters:
-    CodigoPauta:
-      name: codigo
+    IdPauta:
+      name: id
       in: path
       required: true
-      description: Código público da pauta
+      description: Id (UUID) da pauta
       schema:
         type: string
-      example: pt_9f3ka2x1
+        format: uuid
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
 
   schemas:
     PautaRequest:
@@ -217,9 +218,10 @@ components:
     PautaResponse:
       type: object
       properties:
-        codigo:
+        id:
           type: string
-          example: pt_9f3ka2x1
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         titulo:
           type: string
           example: Alterar estatuto social
@@ -286,9 +288,10 @@ components:
     SessaoVotacaoResponse:
       type: object
       properties:
-        pautaCodigo:
+        pautaId:
           type: string
-          example: pt_9f3ka2x1
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         dataAbertura:
           type: string
           format: date-time

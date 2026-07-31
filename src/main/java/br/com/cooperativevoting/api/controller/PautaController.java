@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * Endpoints REST do CRUD de pauta. Converte entre DTO e domínio usando {@link PautaMapper}.
  */
@@ -48,26 +50,26 @@ public class PautaController {
         return pautas.map(pautaMapper::toResponse);
     }
 
-    /** Busca uma pauta pelo código. */
-    @GetMapping("/{codigo}")
-    public PautaResponse buscarPorCodigo(@PathVariable String codigo) {
-        Pauta pauta = pautaService.buscarPorCodigo(codigo);
+    /** Busca uma pauta pelo id. */
+    @GetMapping("/{id}")
+    public PautaResponse buscarPorId(@PathVariable UUID id) {
+        Pauta pauta = pautaService.buscarPorId(id);
         return pautaMapper.toResponse(pauta);
     }
 
     /** Atualiza uma pauta existente. */
-    @PutMapping("/{codigo}")
-    public PautaResponse atualizar(@PathVariable String codigo, @Valid @RequestBody PautaRequest request) {
-        Pauta pauta = pautaService.buscarPorCodigo(codigo);
+    @PutMapping("/{id}")
+    public PautaResponse atualizar(@PathVariable UUID id, @Valid @RequestBody PautaRequest request) {
+        Pauta pauta = pautaService.buscarPorId(id);
         Pauta dadosAtualizados = pautaMapper.toEntity(request);
         Pauta pautaAtualizada = pautaService.atualizar(pauta, dadosAtualizados);
         return pautaMapper.toResponse(pautaAtualizada);
     }
 
     /** Exclui (logicamente) uma pauta existente. */
-    @DeleteMapping("/{codigo}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable String codigo) {
-        pautaService.excluir(codigo);
+    public void excluir(@PathVariable UUID id) {
+        pautaService.excluir(id);
     }
 }

@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * Endpoint REST de abertura de sessão de votação em uma pauta.
  */
 @RestController
-@RequestMapping("/pautas/{codigoPauta}/sessoes")
+@RequestMapping("/pautas/{pautaId}/sessoes")
 @RequiredArgsConstructor
 public class SessaoVotacaoController {
 
@@ -33,15 +35,15 @@ public class SessaoVotacaoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SessaoVotacaoResponse abrir(
-            @PathVariable String codigoPauta,
+            @PathVariable UUID pautaId,
             @Valid @RequestBody(required = false) SessaoVotacaoRequest request) {
 
-        Pauta pauta = pautaService.buscarPorCodigo(codigoPauta);
+        Pauta pauta = pautaService.buscarPorId(pautaId);
 
         SessaoVotacao sessao = request != null && request.duracaoSegundos() != null
                 ? sessaoVotacaoService.abrir(pauta, request.duracaoSegundos())
                 : sessaoVotacaoService.abrir(pauta);
 
-        return sessaoVotacaoMapper.toResponse(sessao, pauta);
+        return sessaoVotacaoMapper.toResponse(sessao);
     }
 }

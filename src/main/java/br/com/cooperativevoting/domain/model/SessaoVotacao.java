@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PostLoad;
 import jakarta.persistence.PostPersist;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AccessLevel;
@@ -17,9 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import br.com.cooperativevoting.domain.util.CodigoGeradorUtils;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Sessão de votação de uma pauta, com janela de tempo em que os votos são aceitos.
@@ -33,13 +31,10 @@ import java.time.LocalDateTime;
 @Builder
 public class SessaoVotacao {
 
+    /** UUID gerado em memória (não sequencial, não adivinhável) — é o próprio identificador público. */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    /** {@code id} é interno (chave técnica); a API e os DTOs trabalham só com {@code codigo}. */
-    @Column(nullable = false, unique = true, updatable = false, length = 20)
-    private String codigo;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     /**
      * Sem {@code @ManyToOne}/{@code @OneToOne} para {@link Pauta}: usar o id evita o custo de
@@ -47,7 +42,7 @@ public class SessaoVotacao {
      * é necessário. A constraint {@code UNIQUE(pauta_id)} no banco garante uma única sessão por pauta.
      */
     @Column(name = "pauta_id", nullable = false, updatable = false)
-    private Long pautaId;
+    private UUID pautaId;
 
     @Column(name = "data_abertura", nullable = false, updatable = false)
     private LocalDateTime dataAbertura;
@@ -65,12 +60,6 @@ public class SessaoVotacao {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private Status status;
-
-    /** Gera o código público antes do insert; é interno à entidade porque só ela sabe seu prefixo. */
-    @PrePersist
-    public void prePersist() {
-        this.codigo = CodigoGeradorUtils.gerar("sv_");
-    }
 
     /**
      * Validação fica em memória, não no banco: uma restrição no banco (ex.: CHECK contra o

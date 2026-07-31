@@ -3,8 +3,10 @@ package br.com.cooperativevoting.domain.exception;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
+import java.util.UUID;
+
 /**
- * Pauta não encontrada pelo código informado.
+ * Pauta não encontrada pelo id informado.
  */
 public final class PautaNaoEncontradaException extends AbstractThrowableProblem {
 
@@ -14,7 +16,7 @@ public final class PautaNaoEncontradaException extends AbstractThrowableProblem 
         super(null, CODIGO, Status.NOT_FOUND, detail);
     }
 
-    public static PautaNaoEncontradaException codigo(String codigo) {
-        return new PautaNaoEncontradaException("Pauta não encontrada: " + codigo);
+    public static PautaNaoEncontradaException id(UUID id) {
+        return new PautaNaoEncontradaException("Pauta não encontrada: " + id);
     }
 }

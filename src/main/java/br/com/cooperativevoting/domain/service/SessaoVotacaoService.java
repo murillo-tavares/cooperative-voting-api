@@ -48,7 +48,7 @@ public class SessaoVotacaoService {
                 .build();
 
         try {
-            return sessaoVotacaoRepository.save(sessao);
+            return sessaoVotacaoRepository.saveAndFlush(sessao);
         } catch (DataIntegrityViolationException exception) {
             throw constraintViolationTranslator.traduzir(exception);
         }

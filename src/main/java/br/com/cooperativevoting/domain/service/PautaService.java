@@ -5,15 +5,13 @@ import br.com.cooperativevoting.domain.filter.PautaFilter;
 import br.com.cooperativevoting.domain.mapper.PautaUpdateMapper;
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.repository.PautaRepository;
-import br.com.cooperativevoting.domain.specification.PautaSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Regras de negócio do CRUD de pauta. Trabalha só com o domínio ({@link Pauta}) —
@@ -28,7 +26,7 @@ public class PautaService {
 
     /** Cria uma nova pauta. */
     public Pauta criar(Pauta pauta) {
-        return pautaRepository.save(pauta);
+        return pautaRepository.saveAndFlush(pauta);
     }
 
     /** Lista todas as pautas não excluídas. */
@@ -41,22 +39,20 @@ public class PautaService {
         return pautaRepository.findAll(filtro.toSpecification(), pageable);
     }
 
-    /** Busca uma pauta pelo código. Lança 404 se não existir. */
-    public Pauta buscarPorCodigo(String codigo) {
-        Specification<Pauta> specification = PautaSpecifications.comCodigo(codigo);
-        Optional<Pauta> pautaEncontrada = pautaRepository.findOne(specification);
-        return pautaEncontrada.orElseThrow(() -> PautaNaoEncontradaException.codigo(codigo));
+    /** Busca uma pauta pelo id. Lança 404 se não existir. */
+    public Pauta buscarPorId(UUID id) {
+        return pautaRepository.findById(id).orElseThrow(() -> PautaNaoEncontradaException.id(id));
     }
 
     /** Atualiza título e descrição de uma pauta existente. */
     public Pauta atualizar(Pauta pauta, Pauta dadosAtualizados) {
         pautaUpdateMapper.atualizarCampos(pauta, dadosAtualizados);
-        return pautaRepository.save(pauta);
+        return pautaRepository.saveAndFlush(pauta);
     }
 
     /** Exclui (logicamente) uma pauta existente. */
-    public void excluir(String codigo) {
-        Pauta pauta = buscarPorCodigo(codigo);
+    public void excluir(UUID id) {
+        Pauta pauta = buscarPorId(id);
         pautaRepository.delete(pauta);
     }
 }
