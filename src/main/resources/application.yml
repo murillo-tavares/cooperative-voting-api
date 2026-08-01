@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: cooperative-voting-api
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+votacao:
+  sessao:
+    duracao-padrao-segundos: ${VOTACAO_SESSAO_DURACAO_PADRAO_SEGUNDOS:60}
+
+integracao:
+  random-org:
+    base-url: ${RANDOM_ORG_BASE_URL:https://www.random.org/integers/?num=1&min=0&max=1&col=1&base=10&format=plain&rnd=new}
+    connect-timeout-millis: ${RANDOM_ORG_CONNECT_TIMEOUT_MILLIS:2000}
+    read-timeout-millis: ${RANDOM_ORG_READ_TIMEOUT_MILLIS:2000}
+
+springdoc:
+  swagger-ui:
+    url: /openapi.yaml

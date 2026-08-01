@@ -9,6 +9,21 @@ API de votação cooperativa — cadastro de pautas, sessões de votação e apu
   <img src="https://img.shields.io/badge/Testcontainers-2496ed?logo=docker&logoColor=white" alt="Testcontainers">
 </p>
 
+## 🚀 Como executar
+
+```bash
+docker compose up --build
+```
+
+Sobe Postgres + API em `http://localhost:8080`.
+
+Alternativa rodando a API localmente (IDE/debug), só o banco em container:
+
+```bash
+docker compose up postgres -d
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
 ## 📖 Documentação
 
 A spec fica em um arquivo próprio — [openapi.yaml](src/main/resources/static/openapi.yaml) ↗ — em vez de gerada a
