@@ -31,9 +31,9 @@ partir de anotação em controller. Decisão consciente: mantém o código do co
 documentação misturada com lógica de negócio, e deixa a descrição dos endpoints (texto, exemplos, formatação)
 livre pra ser customizada sem precisar tocar em código Java.
 
-- 🧭 Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) ↗
-- 🌀 Scalar (alternativa ao Swagger, mesma spec): [http://localhost:8080/scalar.html](http://localhost:8080/scalar.html) ↗
-- 📄 Spec crua: [http://localhost:8080/openapi.yaml](http://localhost:8080/openapi.yaml) ↗
+- 🧭 Swagger UI: [http://localhost:8080/api/v1/swagger-ui/index.html](http://localhost:8080/api/v1/swagger-ui/index.html) ↗
+- 🌀 Scalar (alternativa ao Swagger, mesma spec): [http://localhost:8080/api/v1/scalar.html](http://localhost:8080/api/v1/scalar.html) ↗
+- 📄 Spec crua: [http://localhost:8080/api/v1/openapi.yaml](http://localhost:8080/api/v1/openapi.yaml) ↗
 
 ## 🏷️ Versionamento
 
