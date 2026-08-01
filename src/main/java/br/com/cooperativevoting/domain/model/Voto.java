@@ -47,24 +47,19 @@ public class Voto {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false, length = 10)
-    private Opcao opcao;
+    private SimNao opcao;
 
     @CreationTimestamp
     @Column(name = "data_voto", nullable = false, updatable = false)
     private LocalDateTime dataVoto;
 
     /** Monta o voto a partir da sessão em que foi aceito — {@code pautaId}/{@code sessaoId} vêm dela. */
-    public static Voto novo(SessaoVotacao sessao, String associadoId, Opcao opcao) {
+    public static Voto novo(SessaoVotacao sessao, String associadoId, SimNao opcao) {
         return Voto.builder()
                 .pautaId(sessao.getPautaId())
                 .sessaoId(sessao.getId())
                 .associadoId(associadoId)
                 .opcao(opcao)
                 .build();
-    }
-
-    public enum Opcao {
-        SIM,
-        NAO
     }
 }

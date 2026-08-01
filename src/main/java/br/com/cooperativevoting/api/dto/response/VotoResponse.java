@@ -1,6 +1,6 @@
 package br.com.cooperativevoting.api.dto.response;
 
-import br.com.cooperativevoting.domain.model.Voto;
+import br.com.cooperativevoting.domain.model.SimNao;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +12,7 @@ public record VotoResponse(
         UUID pautaId,
         UUID sessaoId,
         String associadoId,
-        Voto.Opcao opcao,
+        SimNao opcao,
         LocalDateTime dataVoto
 ) {
 }

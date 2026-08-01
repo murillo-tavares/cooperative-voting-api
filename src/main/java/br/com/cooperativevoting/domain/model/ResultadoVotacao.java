@@ -12,32 +12,16 @@ public record ResultadoVotacao(
         long totalVotosSim,
         long totalVotosNao,
         long totalVotos,
-        Resultado resultado
+        Veredito resultado
 ) {
 
     public static ResultadoVotacao calcular(UUID pautaId, long totalVotosSim, long totalVotosNao) {
-        Resultado resultado = Resultado.calcular(totalVotosSim, totalVotosNao);
+        Veredito resultado = Veredito.calcular(totalVotosSim, totalVotosNao);
         return new ResultadoVotacao(
                 pautaId,
                 totalVotosSim,
                 totalVotosNao,
                 totalVotosSim + totalVotosNao,
                 resultado);
-    }
-
-    public enum Resultado {
-        APROVADA,
-        REPROVADA,
-        EMPATE;
-
-        public static Resultado calcular(long totalVotosSim, long totalVotosNao) {
-            if (totalVotosSim > totalVotosNao) {
-                return APROVADA;
-            }
-            if (totalVotosNao > totalVotosSim) {
-                return REPROVADA;
-            }
-            return EMPATE;
-        }
     }
 }

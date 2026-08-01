@@ -52,11 +52,11 @@ public class SessaoVotacao {
      * Não é coluna, calculado uma vez (na carga ou na criação) e cacheado aqui, pra
      * getStatus() ser imutável dentro do ciclo de vida do objeto — chamadas
      * repetidas no mesmo objeto sempre retornam o mesmo valor, mesmo que o tempo passe.
+     * Sem setter: ninguém de fora pode sobrescrever o valor calculado.
      */
     @Transient
-    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private Status status;
+    private StatusSessao status;
 
     /**
      * Validação fica em memória, não no banco: uma restrição no banco (ex.: CHECK contra o
@@ -66,24 +66,15 @@ public class SessaoVotacao {
     @PostLoad
     @PostPersist
     private void calcularStatus() {
-        status = LocalDateTime.now().isBefore(dataFechamento) ? Status.ABERTA : Status.ENCERRADA;
-    }
-
-    public Status getStatus() {
-        return status;
+        status = LocalDateTime.now().isBefore(dataFechamento) ? StatusSessao.ABERTA : StatusSessao.ENCERRADA;
     }
 
     /**
      * Precondição pra qualquer operação que exija a sessão aberta (ex.: votar).
      */
     public void requireNaoEncerrada() {
-        if (status == Status.ENCERRADA) {
+        if (status == StatusSessao.ENCERRADA) {
             throw SessaoVotacaoEncerradaException.id(id);
         }
-    }
-
-    public enum Status {
-        ABERTA,
-        ENCERRADA
     }
 }

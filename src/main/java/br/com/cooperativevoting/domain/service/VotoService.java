@@ -5,6 +5,7 @@ import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationT
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.model.ResultadoVotacao;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
+import br.com.cooperativevoting.domain.model.SimNao;
 import br.com.cooperativevoting.domain.model.Voto;
 import br.com.cooperativevoting.domain.repository.VotoRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class VotoService {
      * Sem SELECT prévio pra checar duplicidade — {@code uk_voto_pauta_associado} garante,
      * e a violação vira exceção via {@link ConstraintViolationTranslator}.
      */
-    public Voto votar(SessaoVotacao sessao, String associadoId, Voto.Opcao opcao) {
+    public Voto votar(SessaoVotacao sessao, String associadoId, SimNao opcao) {
         sessao.requireNaoEncerrada();
         votoAptidaoClient.requirePodeVotar(associadoId);
 

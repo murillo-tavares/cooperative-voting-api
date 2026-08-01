@@ -1,6 +1,6 @@
 package br.com.cooperativevoting.api.dto.request;
 
-import br.com.cooperativevoting.domain.model.Voto;
+import br.com.cooperativevoting.domain.model.SimNao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,6 +10,6 @@ public record VotoRequest(
         String associadoId,
 
         @NotNull(message = "opcao é obrigatório")
-        Voto.Opcao opcao
+        SimNao opcao
 ) {
 }
