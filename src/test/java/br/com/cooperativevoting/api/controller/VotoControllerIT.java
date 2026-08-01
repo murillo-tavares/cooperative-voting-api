@@ -3,6 +3,7 @@ package br.com.cooperativevoting.api.controller;
 import br.com.cooperativevoting.api.dto.request.VotoRequest;
 import br.com.cooperativevoting.domain.client.VotoAptidaoClient;
 import br.com.cooperativevoting.domain.exception.AssociadoNaoAptoException;
+import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
 import br.com.cooperativevoting.domain.exception.SessaoVotacaoEncerradaException;
 import br.com.cooperativevoting.domain.exception.SessaoVotacaoNaoEncontradaException;
 import br.com.cooperativevoting.domain.exception.constraint.VotoJaRegistradoException;
@@ -11,6 +12,7 @@ import br.com.cooperativevoting.domain.model.SessaoVotacao;
 import br.com.cooperativevoting.domain.model.Voto;
 import br.com.cooperativevoting.domain.repository.SessaoVotacaoRepository;
 import br.com.cooperativevoting.domain.service.SessaoVotacaoService;
+import br.com.cooperativevoting.domain.service.VotoService;
 import br.com.cooperativevoting.support.fixture.PautaTestDataFactory;
 import br.com.cooperativevoting.support.suite.IntegrationTest;
 import tools.jackson.databind.ObjectMapper;
@@ -27,6 +29,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +51,9 @@ class VotoControllerIT extends IntegrationTest {
 
     @Autowired
     private SessaoVotacaoRepository sessaoVotacaoRepository;
+
+    @Autowired
+    private VotoService votoService;
 
     @MockitoBean
     private VotoAptidaoClient votoAptidaoClient;
@@ -148,5 +154,72 @@ class VotoControllerIT extends IntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.codigo").value(AssociadoNaoAptoException.CODIGO));
+    }
+
+    // ---- resultado ----
+
+    @Test
+    void deveApurarResultadoAprovado() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+        SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
+        votoService.votar(sessao, "11111111111", Voto.Opcao.SIM);
+        votoService.votar(sessao, "22222222222", Voto.Opcao.SIM);
+        votoService.votar(sessao, "33333333333", Voto.Opcao.NAO);
+
+        mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pautaId").value(pauta.getId().toString()))
+                .andExpect(jsonPath("$.totalVotosSim").value(2))
+                .andExpect(jsonPath("$.totalVotosNao").value(1))
+                .andExpect(jsonPath("$.totalVotos").value(3))
+                .andExpect(jsonPath("$.resultado").value("APROVADA"));
+    }
+
+    @Test
+    void deveApurarResultadoReprovado() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+        SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
+        votoService.votar(sessao, "11111111111", Voto.Opcao.NAO);
+        votoService.votar(sessao, "22222222222", Voto.Opcao.NAO);
+        votoService.votar(sessao, "33333333333", Voto.Opcao.SIM);
+
+        mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalVotosSim").value(1))
+                .andExpect(jsonPath("$.totalVotosNao").value(2))
+                .andExpect(jsonPath("$.resultado").value("REPROVADA"));
+    }
+
+    @Test
+    void deveApurarResultadoEmpateComVotos() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+        SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
+        votoService.votar(sessao, "11111111111", Voto.Opcao.SIM);
+        votoService.votar(sessao, "22222222222", Voto.Opcao.NAO);
+
+        mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalVotosSim").value(1))
+                .andExpect(jsonPath("$.totalVotosNao").value(1))
+                .andExpect(jsonPath("$.resultado").value("EMPATE"));
+    }
+
+    @Test
+    void deveApurarResultadoSemVotos() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+
+        mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalVotosSim").value(0))
+                .andExpect(jsonPath("$.totalVotosNao").value(0))
+                .andExpect(jsonPath("$.totalVotos").value(0))
+                .andExpect(jsonPath("$.resultado").value("EMPATE"));
+    }
+
+    @Test
+    void naoDeveApurarResultadoParaPautaInexistente() throws Exception {
+        mockMvc.perform(get("/pautas/{pautaId}/resultado", UUID.randomUUID()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.codigo").value(PautaNaoEncontradaException.CODIGO));
     }
 }

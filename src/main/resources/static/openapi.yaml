@@ -14,6 +14,8 @@ tags:
     description: Abertura de sessões de votação em pautas
   - name: Voto
     description: Recebimento de votos numa sessão de votação
+  - name: Resultado
+    description: Apuração do resultado de votação de uma pauta
 
 paths:
   /pautas:
@@ -236,6 +238,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/Erro"
 
+  /pautas/{id}/resultado:
+    get:
+      tags: [Resultado]
+      summary: Contabiliza os votos de uma pauta e devolve o resultado
+      description: >-
+        Apura a qualquer momento, mesmo com a sessão ainda aberta (resultado parcial nesse caso).
+      operationId: apurarResultadoVotacao
+      parameters:
+        - $ref: "#/components/parameters/IdPauta"
+      responses:
+        "200":
+          description: Resultado apurado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultadoVotacaoResponse"
+        "404":
+          description: Pauta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+
 components:
   parameters:
     IdPauta:
@@ -381,6 +406,26 @@ components:
         dataVoto:
           type: string
           format: date-time
+
+    ResultadoVotacaoResponse:
+      type: object
+      properties:
+        pautaId:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        totalVotosSim:
+          type: integer
+          format: int64
+        totalVotosNao:
+          type: integer
+          format: int64
+        totalVotos:
+          type: integer
+          format: int64
+        resultado:
+          type: string
+          enum: [APROVADA, REPROVADA, EMPATE]
 
     ErroValidacao:
       allOf:

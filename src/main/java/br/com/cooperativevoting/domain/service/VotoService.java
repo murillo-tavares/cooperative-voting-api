@@ -2,6 +2,8 @@ package br.com.cooperativevoting.domain.service;
 
 import br.com.cooperativevoting.domain.client.VotoAptidaoClient;
 import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationTranslator;
+import br.com.cooperativevoting.domain.model.Pauta;
+import br.com.cooperativevoting.domain.model.ResultadoVotacao;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
 import br.com.cooperativevoting.domain.model.Voto;
 import br.com.cooperativevoting.domain.repository.VotoRepository;
@@ -35,5 +37,10 @@ public class VotoService {
         } catch (DataIntegrityViolationException exception) {
             throw constraintViolationTranslator.traduzir(exception);
         }
+    }
+
+    /** Apura o total de votos de uma pauta. */
+    public ResultadoVotacao resultado(Pauta pauta) {
+        return votoRepository.resultado(pauta.getId());
     }
 }
