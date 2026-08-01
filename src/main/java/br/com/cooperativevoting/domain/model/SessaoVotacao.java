@@ -1,5 +1,6 @@
 package br.com.cooperativevoting.domain.model;
 
+import br.com.cooperativevoting.domain.exception.SessaoVotacaoEncerradaException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,6 +71,15 @@ public class SessaoVotacao {
 
     public Status getStatus() {
         return status;
+    }
+
+    /**
+     * Precondição pra qualquer operação que exija a sessão aberta (ex.: votar).
+     */
+    public void requireNaoEncerrada() {
+        if (status == Status.ENCERRADA) {
+            throw SessaoVotacaoEncerradaException.id(id);
+        }
     }
 
     public enum Status {

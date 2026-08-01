@@ -1,8 +1,6 @@
 package br.com.cooperativevoting.domain.service;
 
 import br.com.cooperativevoting.domain.client.VotoAptidaoClient;
-import br.com.cooperativevoting.domain.exception.AssociadoNaoAptoException;
-import br.com.cooperativevoting.domain.exception.SessaoVotacaoEncerradaException;
 import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationTranslator;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
 import br.com.cooperativevoting.domain.model.Voto;
@@ -27,13 +25,8 @@ public class VotoService {
      * e a violação vira exceção via {@link ConstraintViolationTranslator}.
      */
     public Voto votar(SessaoVotacao sessao, String associadoId, Voto.Opcao opcao) {
-        if (sessao.getStatus() == SessaoVotacao.Status.ENCERRADA) {
-            throw SessaoVotacaoEncerradaException.id(sessao.getId());
-        }
-
-        if (!votoAptidaoClient.podeVotar(associadoId)) {
-            throw AssociadoNaoAptoException.associado(associadoId);
-        }
+        sessao.requireNaoEncerrada();
+        votoAptidaoClient.requirePodeVotar(associadoId);
 
         Voto voto = Voto.novo(sessao, associadoId, opcao);
 

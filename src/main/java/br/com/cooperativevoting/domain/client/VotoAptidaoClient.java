@@ -1,5 +1,6 @@
 package br.com.cooperativevoting.domain.client;
 
+import br.com.cooperativevoting.domain.exception.AssociadoNaoAptoException;
 import br.com.cooperativevoting.domain.exception.client.VotoAptidaoIndisponivelException;
 
 /**
@@ -19,4 +20,16 @@ public interface VotoAptidaoClient {
      *         de forma inesperada
      */
     boolean podeVotar(String cpf);
+
+    /**
+     * Precondição pra votar: consulta {@link #podeVotar(String)} e lança se o associado não
+     * estiver apto.
+     *
+     * @throws AssociadoNaoAptoException se o associado não estiver apto a votar
+     */
+    default void requirePodeVotar(String cpf) {
+        if (!podeVotar(cpf)) {
+            throw AssociadoNaoAptoException.associado(cpf);
+        }
+    }
 }
