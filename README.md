@@ -43,6 +43,37 @@ Cada versão publicada segue [Keep a Changelog](https://keepachangelog.com/pt-BR
 - 📝 Changelog: [CHANGELOG.md](CHANGELOG.md) ↗
 - 🚀 Releases: [github.com/murillo-tavares/cooperative-voting-api/releases](https://github.com/murillo-tavares/cooperative-voting-api/releases) ↗
 
+## 🧪 Testes
+
+Suíte dividida entre testes unitários e de integração, marcados respectivamente pelas interfaces
+[UnitTest](src/test/java/br/com/cooperativevoting/support/suite/UnitTest.java) ↗ (`@Tag("unit")`) e
+[IntegrationTest](src/test/java/br/com/cooperativevoting/support/suite/IntegrationTest.java) ↗ (`@Tag("integration")`).
+Integração sobe banco real via Testcontainers — precisa Docker rodando.
+
+```bash
+./mvnw test  # unitário: rápido, sem infra
+```
+
+```bash
+./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration  # integração: banco via Testcontainers (Docker)
+```
+
+### 🔥 Carga
+
+[VotoSimulation](src/test/java/br/com/cooperativevoting/loadtest/VotoSimulation.java) ↗ (Gatling) sobe uma pauta,
+abre sessão e simula 200 usuários votando concorrentemente. Precisa da API rodando com o profile `loadtest` ativo
+(cliente de aptidão fake, sem depender do random.org):
+
+> ⚠️ **A integração com sistema externo (random.org, Tarefa Bônus 1) é o maior gargalo de tempo de resposta do
+> fluxo de voto.** Medido diretamente: média de ~387ms por chamada, chegando a ~690ms — contra poucos ms do resto
+> da aplicação. Por isso o teste de carga usa um cliente fake no lugar do random.org: sem isso, o resultado mediria
+> a latência do random.org, não da aplicação em si.
+
+```bash
+SPRING_PROFILES_ACTIVE=loadtest docker compose up -d --build app
+./mvnw gatling:test -DbaseUrl=http://localhost:8080/api/v1
+```
+
 ## 🏗️ Arquitetura
 
 ### 🔄 DTOs + MapStruct
@@ -91,18 +122,3 @@ Adicionar um filtro é sempre três passos: um campo no record, um método novo 
 
 Exclusão é lógica: um `UPDATE` que marca `data_exclusao`, não um `DELETE`. Mantém histórico pra auditoria e
 permite recuperação.
-
-## 🧪 Testes
-
-Suíte dividida entre testes unitários e de integração, marcados respectivamente pelas interfaces
-[UnitTest](src/test/java/br/com/cooperativevoting/support/suite/UnitTest.java) ↗ (`@Tag("unit")`) e
-[IntegrationTest](src/test/java/br/com/cooperativevoting/support/suite/IntegrationTest.java) ↗ (`@Tag("integration")`).
-Integração sobe banco real via Testcontainers — precisa Docker rodando.
-
-```bash
-./mvnw test  # unitário: rápido, sem infra
-```
-
-```bash
-./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration  # integração: banco via Testcontainers (Docker)
-```

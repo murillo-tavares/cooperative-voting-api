@@ -23,6 +23,7 @@ services:
       DB_URL: jdbc:postgresql://postgres:5432/cooperative_voting
       DB_USERNAME: cooperative_voting
       DB_PASSWORD: cooperative_voting
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-}
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,0 +1,4 @@
+loadtest:
+  voto-aptidao:
+    delay-millis-min: 50
+    delay-millis-max: 300
