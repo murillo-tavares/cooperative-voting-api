@@ -6,7 +6,6 @@ API de votação cooperativa — cadastro de pautas, sessões de votação e apu
   <img src="https://img.shields.io/badge/Java-21-e76f00?logo=openjdk&logoColor=white" alt="Java 21">
   <img src="https://img.shields.io/badge/Spring%20Boot-4.1-6db33f?logo=springboot&logoColor=white" alt="Spring Boot 4.1">
   <img src="https://img.shields.io/badge/PostgreSQL-4169e1?logo=postgresql&logoColor=white" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/Kafka-231f20?logo=apachekafka&logoColor=white" alt="Kafka">
   <img src="https://img.shields.io/badge/Testcontainers-2496ed?logo=docker&logoColor=white" alt="Testcontainers">
 </p>
 
@@ -83,12 +82,12 @@ permite recuperação.
 Suíte dividida entre testes unitários e de integração, marcados respectivamente pelas interfaces
 [UnitTest](src/test/java/br/com/cooperativevoting/support/suite/UnitTest.java) ↗ (`@Tag("unit")`) e
 [IntegrationTest](src/test/java/br/com/cooperativevoting/support/suite/IntegrationTest.java) ↗ (`@Tag("integration")`).
-Integração sobe banco e Kafka reais via Testcontainers — precisa Docker rodando.
+Integração sobe banco real via Testcontainers — precisa Docker rodando.
 
 ```bash
 ./mvnw test  # unitário: rápido, sem infra
 ```
 
 ```bash
-./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration  # integração: banco/Kafka via Testcontainers (Docker)
+./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration  # integração: banco via Testcontainers (Docker)
 ```

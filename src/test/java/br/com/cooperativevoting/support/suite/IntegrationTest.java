@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Base para testes de integração com contexto Spring completo e banco/kafka reais via Testcontainers.
+ * Base para testes de integração com contexto Spring completo e banco real via Testcontainers.
  * Cada teste roda em transação própria, revertida ao final, então nenhum dado criado num teste
  * vaza para o próximo.
  * Contraponto de {@link UnitTest}: a tag "integration" permite excluir essa suíte lenta de

@@ -9,8 +9,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/cooperative_voting
     username: cooperative_voting
     password: cooperative_voting
-  kafka:
-    bootstrap-servers: localhost:9092
   jpa:
     hibernate:
       ddl-auto: validate
