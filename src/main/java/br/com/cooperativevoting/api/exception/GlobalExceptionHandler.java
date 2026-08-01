@@ -27,6 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ThrowableProblem.class)
     public ResponseEntity<ErroResponse> handleProblem(ThrowableProblem ex, WebRequest request) {
+        log.warn("Erro de negócio: {} - {}", ex.getClass().getSimpleName(), ex.getMessage());
         ErroResponse erro = ErroResponse.builder()
                 .problem(ex)
                 .request(request)

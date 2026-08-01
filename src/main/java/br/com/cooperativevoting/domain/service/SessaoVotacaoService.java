@@ -8,6 +8,8 @@ import br.com.cooperativevoting.domain.repository.SessaoVotacaoRepository;
 import br.com.cooperativevoting.domain.specification.SessaoVotacaoSpecifications;
 import br.com.cooperativevoting.properties.SessaoVotacaoProperties;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class SessaoVotacaoService {
+
+    private static final Logger log = LoggerFactory.getLogger(SessaoVotacaoService.class);
 
     private final SessaoVotacaoRepository sessaoVotacaoRepository;
     private final SessaoVotacaoProperties sessaoVotacaoProperties;
@@ -51,7 +55,9 @@ public class SessaoVotacaoService {
                 .build();
 
         try {
-            return sessaoVotacaoRepository.saveAndFlush(sessao);
+            SessaoVotacao salva = sessaoVotacaoRepository.saveAndFlush(sessao);
+            log.info("Sessão de votação aberta: pautaId={}, dataFechamento={}", pauta.getId(), salva.getDataFechamento());
+            return salva;
         } catch (DataIntegrityViolationException exception) {
             throw constraintViolationTranslator.traduzir(exception);
         }

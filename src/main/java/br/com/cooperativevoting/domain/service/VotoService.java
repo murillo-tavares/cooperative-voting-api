@@ -9,6 +9,8 @@ import br.com.cooperativevoting.domain.model.SimNao;
 import br.com.cooperativevoting.domain.model.Voto;
 import br.com.cooperativevoting.domain.repository.VotoRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class VotoService {
+
+    private static final Logger log = LoggerFactory.getLogger(VotoService.class);
 
     private final VotoRepository votoRepository;
     private final VotoAptidaoClient votoAptidaoClient;
@@ -34,7 +38,9 @@ public class VotoService {
         Voto voto = Voto.novo(sessao, associadoId, opcao);
 
         try {
-            return votoRepository.saveAndFlush(voto);
+            Voto salvo = votoRepository.saveAndFlush(voto);
+            log.info("Voto registrado: sessaoId={}, opcao={}", sessao.getId(), opcao);
+            return salvo;
         } catch (DataIntegrityViolationException exception) {
             throw constraintViolationTranslator.traduzir(exception);
         }
