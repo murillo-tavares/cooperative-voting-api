@@ -6,7 +6,7 @@ import org.zalando.problem.Status;
 import java.util.UUID;
 
 /**
- * Sessão de votação não encontrada pelo id informado.
+ * Sessão de votação não encontrada para a pauta informada.
  */
 public final class SessaoVotacaoNaoEncontradaException extends AbstractThrowableProblem {
 
@@ -16,7 +16,7 @@ public final class SessaoVotacaoNaoEncontradaException extends AbstractThrowable
         super(null, CODIGO, Status.NOT_FOUND, detail);
     }
 
-    public static SessaoVotacaoNaoEncontradaException id(UUID id) {
-        return new SessaoVotacaoNaoEncontradaException("Sessão de votação não encontrada: " + id);
+    public static SessaoVotacaoNaoEncontradaException pautaId(UUID pautaId) {
+        return new SessaoVotacaoNaoEncontradaException("Sessão de votação não encontrada para a pauta: " + pautaId);
     }
 }

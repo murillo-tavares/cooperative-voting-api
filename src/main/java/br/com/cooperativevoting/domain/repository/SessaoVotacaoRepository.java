@@ -10,6 +10,8 @@ import java.util.UUID;
  * Acesso a dados da {@link SessaoVotacao}.
  * Unicidade de sessão por pauta é garantida pela constraint {@code UNIQUE(pauta_id)} no banco,
  * não por consulta prévia (evita condição de corrida sob concorrência).
+ * {@link JpaSpecificationExecutor} habilita consulta por {@code Specification}
+ * (ver {@code SessaoVotacaoSpecifications}).
  */
 public interface SessaoVotacaoRepository extends JpaRepository<SessaoVotacao, UUID>, JpaSpecificationExecutor<SessaoVotacao> {
 }

@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 /**
- * Endpoint REST de recebimento de voto numa sessão de votação.
+ * Endpoint REST de recebimento de voto na sessão de votação de uma pauta.
  */
 @RestController
-@RequestMapping("/sessoes/{sessaoId}/votos")
+@RequestMapping("/pautas/{pautaId}/votos")
 @RequiredArgsConstructor
 public class VotoController {
 
@@ -31,11 +31,11 @@ public class VotoController {
     private final SessaoVotacaoService sessaoVotacaoService;
     private final VotoMapper votoMapper;
 
-    /** Registra o voto de um associado na sessão. */
+    /** Registra o voto de um associado na pauta. */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VotoResponse votar(@PathVariable UUID sessaoId, @Valid @RequestBody VotoRequest request) {
-        SessaoVotacao sessao = sessaoVotacaoService.buscarPorId(sessaoId);
+    public VotoResponse votar(@PathVariable UUID pautaId, @Valid @RequestBody VotoRequest request) {
+        SessaoVotacao sessao = sessaoVotacaoService.buscarPorPautaId(pautaId);
         Voto voto = votoService.votar(sessao, request.associadoId(), request.opcao());
         return votoMapper.toResponse(voto);
     }

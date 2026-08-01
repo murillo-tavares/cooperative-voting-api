@@ -5,6 +5,7 @@ import br.com.cooperativevoting.domain.exception.constraint.ConstraintViolationT
 import br.com.cooperativevoting.domain.model.Pauta;
 import br.com.cooperativevoting.domain.model.SessaoVotacao;
 import br.com.cooperativevoting.domain.repository.SessaoVotacaoRepository;
+import br.com.cooperativevoting.domain.specification.SessaoVotacaoSpecifications;
 import br.com.cooperativevoting.properties.SessaoVotacaoProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,8 +57,9 @@ public class SessaoVotacaoService {
         }
     }
 
-    /** Busca uma sessão de votação pelo id. Lança 404 se não existir. */
-    public SessaoVotacao buscarPorId(UUID id) {
-        return sessaoVotacaoRepository.findById(id).orElseThrow(() -> SessaoVotacaoNaoEncontradaException.id(id));
+    /** Busca a sessão de votação da pauta. Lança 404 se nenhuma sessão tiver sido aberta para ela. */
+    public SessaoVotacao buscarPorPautaId(UUID pautaId) {
+        return sessaoVotacaoRepository.findOne(SessaoVotacaoSpecifications.comPautaId(pautaId))
+                .orElseThrow(() -> SessaoVotacaoNaoEncontradaException.pautaId(pautaId));
     }
 }
