@@ -18,6 +18,7 @@ import br.com.cooperativevoting.support.suite.IntegrationTest;
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -55,7 +56,7 @@ class VotoControllerIT extends IntegrationTest {
     @Autowired
     private VotoService votoService;
 
-    @MockitoBean
+    @MockitoBean(answers = Answers.CALLS_REAL_METHODS)
     private VotoAptidaoClient votoAptidaoClient;
 
     @BeforeEach
