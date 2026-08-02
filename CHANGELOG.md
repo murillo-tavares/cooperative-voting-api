@@ -5,11 +5,13 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [Unreleased]
+## [1.3.0] - 2026-08-02
 
 ### Added
 - Validação de CPF no `associadoId` do voto (`@CPF` do Bean Validation, além do `@NotBlank`
   já existente): `POST /pautas/{id}/votos` responde 400 se o CPF for formalmente inválido.
+
+[1.3.0]: https://github.com/murillo-tavares/cooperative-voting-api/releases/tag/v1.3.0
 
 ## [1.2.0] - 2026-08-01
 
