@@ -30,13 +30,13 @@ docker compose up postgres -d
 
 ## 📖 Documentação
 
-A spec fica em [openapi.yaml](src/main/resources/static/openapi.yaml) ↗, um arquivo próprio em vez de gerada por
+A spec fica em <a href="src/main/resources/static/openapi.yaml" target="_blank" rel="noopener noreferrer">openapi.yaml</a> ↗, um arquivo próprio em vez de gerada por
 anotação no controller. **Decisão:** controller fica limpo, e a doc é livre 
 pra customizar sem mexer em Java.
 
-- 🧭 Swagger UI: [https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html](https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html) ↗
-- 🌀 Scalar (alternativa): [https://cooperative-voting-api.onrender.com/api/v1/scalar.html](https://cooperative-voting-api.onrender.com/api/v1/scalar.html) ↗
-- 📄 Spec: [https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml](https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml) ↗
+- 🌀 Scalar: <a href="https://cooperative-voting-api.onrender.com/api/v1/scalar.html" target="_blank" rel="noopener noreferrer">https://cooperative-voting-api.onrender.com/api/v1/scalar.html</a> ↗
+- 🧭 Swagger UI (alternativa): <a href="https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html" target="_blank" rel="noopener noreferrer">https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html</a> ↗
+- 📄 Spec: <a href="https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml" target="_blank" rel="noopener noreferrer">https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml</a> ↗
 
 > ⚠️ Hospedado no plano free do Render: a instância dorme por inatividade e o primeiro acesso após um tempo sem
 > uso pode demorar cerca de 1 minuto pra subir. Além disso, por se tratar de um ambiente gratuito, é normal haver 
@@ -45,29 +45,29 @@ pra customizar sem mexer em Java.
 <details>
 <summary>Local (localhost:8080)</summary>
 
-- 🧭 Swagger UI: [http://localhost:8080/api/v1/swagger-ui/index.html](http://localhost:8080/api/v1/swagger-ui/index.html) ↗
-- 🌀 Scalar (alternativa): [http://localhost:8080/api/v1/scalar.html](http://localhost:8080/api/v1/scalar.html) ↗
-- 📄 Spec: [http://localhost:8080/api/v1/openapi.yaml](http://localhost:8080/api/v1/openapi.yaml) ↗
+- 🌀 Scalar: <a href="http://localhost:8080/api/v1/scalar.html" target="_blank" rel="noopener noreferrer">http://localhost:8080/api/v1/scalar.html</a> ↗
+- 🧭 Swagger UI (alternativa): <a href="http://localhost:8080/api/v1/swagger-ui/index.html" target="_blank" rel="noopener noreferrer">http://localhost:8080/api/v1/swagger-ui/index.html</a> ↗
+- 📄 Spec: <a href="http://localhost:8080/api/v1/openapi.yaml" target="_blank" rel="noopener noreferrer">http://localhost:8080/api/v1/openapi.yaml</a> ↗
 
 </details>
 
 ### 📮 Postman
 
-- [cooperative-voting-api.postman_collection.json](docs/postman/cooperative-voting-api.postman_collection.json) ↗
-- [cooperative-voting-api.local.postman_environment.json](docs/postman/cooperative-voting-api.local.postman_environment.json) ↗
-- [cooperative-voting-api.render.postman_environment.json](docs/postman/cooperative-voting-api.render.postman_environment.json) ↗
+- <a href="docs/postman/cooperative-voting-api.postman_collection.json" target="_blank" rel="noopener noreferrer">cooperative-voting-api.postman_collection.json</a> ↗
+- <a href="docs/postman/cooperative-voting-api.local.postman_environment.json" target="_blank" rel="noopener noreferrer">cooperative-voting-api.local.postman_environment.json</a> ↗
+- <a href="docs/postman/cooperative-voting-api.render.postman_environment.json" target="_blank" rel="noopener noreferrer">cooperative-voting-api.render.postman_environment.json</a> ↗
 
-Mais detalhes (import, troca de ambiente) em [docs/postman/README.md](docs/postman/README.md) ↗.
+Mais detalhes (import, troca de ambiente) em <a href="docs/postman/README.md" target="_blank" rel="noopener noreferrer">docs/postman/README.md</a> ↗.
 
 ## 🏷️ Versionamento
 
 API versionada por path (`/api/v1`).
 
-Releases seguem [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) ↗ e
-[Semantic Versioning](https://semver.org/lang/pt-BR/) ↗, com tag `vX.Y.Z` no repositório.
+Releases seguem <a href="https://keepachangelog.com/pt-BR/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a> ↗ e
+<a href="https://semver.org/lang/pt-BR/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a> ↗, com tag `vX.Y.Z` no repositório.
 
-- 📝 Changelog: [CHANGELOG.md](CHANGELOG.md) ↗
-- 🚀 Releases: [github.com/murillo-tavares/cooperative-voting-api/releases](https://github.com/murillo-tavares/cooperative-voting-api/releases) ↗
+- 📝 Changelog: <a href="CHANGELOG.md" target="_blank" rel="noopener noreferrer">CHANGELOG.md</a> ↗
+- 🚀 Releases: <a href="https://github.com/murillo-tavares/cooperative-voting-api/releases" target="_blank" rel="noopener noreferrer">github.com/murillo-tavares/cooperative-voting-api/releases</a> ↗
 
 ## 🧪 Testes
 
@@ -89,7 +89,7 @@ Sobe banco real via Testcontainers. Precisa de **Docker rodando**:
 
 ### 🔥 Teste de carga
 
-[VotoSimulation](src/test/java/br/com/cooperativevoting/loadtest/VotoSimulation.java) ↗ (Gatling) sobe uma pauta,
+<a href="src/test/java/br/com/cooperativevoting/loadtest/VotoSimulation.java" target="_blank" rel="noopener noreferrer">VotoSimulation</a> ↗ (Gatling) sobe uma pauta,
 abre sessão e simula 200 usuários votando ao mesmo tempo. Precisa da **API rodando** com o profile `loadtest`
 ativo (cliente de aptidão fake, não depende do random.org):
 
@@ -106,9 +106,9 @@ SPRING_PROFILES_ACTIVE=loadtest docker compose up -d --build app
 
 ### 🔄 DTOs + MapStruct
 
-Mapeamento entre [DTO](src/main/java/br/com/cooperativevoting/api/dto) ↗ e
-[domínio](src/main/java/br/com/cooperativevoting/domain/model) ↗ é gerado em build time pelo
-[MapStruct](src/main/java/br/com/cooperativevoting/api/mapper) ↗. Sem conversão manual pra escrever ou manter:
+Mapeamento entre <a href="src/main/java/br/com/cooperativevoting/api/dto" target="_blank" rel="noopener noreferrer">DTO</a> ↗ e
+<a href="src/main/java/br/com/cooperativevoting/domain/model" target="_blank" rel="noopener noreferrer">domínio</a> ↗ é gerado em build time pelo
+<a href="src/main/java/br/com/cooperativevoting/api/mapper" target="_blank" rel="noopener noreferrer">MapStruct</a> ↗. Sem conversão manual pra escrever ou manter:
 mudar um campo é só mexer na interface do mapper.
 
 No controller o DTO nunca escapa da camada web. Chega como JSON, o mapper converte pra entidade de domínio antes
@@ -118,23 +118,23 @@ do service; na volta, converte de novo antes de virar JSON.
 
 ### 🚨 Tratamento de erros
 
-Cada erro de negócio tem sua própria [exception](src/main/java/br/com/cooperativevoting/domain/exception) ↗, com
+Cada erro de negócio tem sua própria <a href="src/main/java/br/com/cooperativevoting/domain/exception" target="_blank" rel="noopener noreferrer">exception</a> ↗, com
 status, mensagem e código únicos. O
-[GlobalExceptionHandler](src/main/java/br/com/cooperativevoting/api/exception/GlobalExceptionHandler.java) ↗
+<a href="src/main/java/br/com/cooperativevoting/api/exception/GlobalExceptionHandler.java" target="_blank" rel="noopener noreferrer">GlobalExceptionHandler</a> ↗
 captura tudo via Zalando Problem: um catálogo autodocumentado e testável pelo código, sem depender de texto solto.
 
 Violação de constraint do banco (ex.: sessão duplicada) usa **strategy + map**. O `INSERT` é otimista (um
 `SELECT` prévio não seguraria concorrência); se a constraint falhar, o
-[ConstraintViolationTranslator](src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationTranslator.java) ↗
+<a href="src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationTranslator.java" target="_blank" rel="noopener noreferrer">ConstraintViolationTranslator</a> ↗
 busca no `Map<constraintName, Mapper>` qual
-[ConstraintViolationMapper](src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationMapper.java) ↗
+<a href="src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationMapper.java" target="_blank" rel="noopener noreferrer">ConstraintViolationMapper</a> ↗
 sabe traduzir. Nova constraint é só nova implementação, sem tocar no tradutor.
 
 <img src="docs/diagrams/erros-fluxo.svg" alt="Diagrama de classes: strategy pattern do tratamento de constraint violation" width="820">
 
 ### 🧩 Filtro + Specification
 
-[Filtros](src/main/java/br/com/cooperativevoting/domain/filter) ↗ usam `Specification` do Spring Data em vez de
+<a href="src/main/java/br/com/cooperativevoting/domain/filter" target="_blank" rel="noopener noreferrer">Filtros</a> ↗ usam `Specification` do Spring Data em vez de
 query fixa. Cada campo filtrável é um critério isolado em `PautaSpecifications`, e o `SpecificationBuilder`
 combina só os critérios presentes na requisição num `AND`. Um filtro novo é só mais um critério: não afeta os
 existentes nem pede um método por combinação.
