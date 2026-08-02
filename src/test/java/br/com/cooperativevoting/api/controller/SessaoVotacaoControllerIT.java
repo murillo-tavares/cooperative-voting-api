@@ -2,6 +2,7 @@ package br.com.cooperativevoting.api.controller;
 
 import br.com.cooperativevoting.api.dto.request.SessaoVotacaoRequest;
 import br.com.cooperativevoting.api.dto.response.SessaoVotacaoResponse;
+import br.com.cooperativevoting.domain.exception.DuracaoSessaoInvalidaException;
 import br.com.cooperativevoting.domain.exception.PautaNaoEncontradaException;
 import br.com.cooperativevoting.domain.exception.constraint.SessaoVotacaoJaAbertaException;
 import br.com.cooperativevoting.domain.model.Pauta;
@@ -85,6 +86,18 @@ class SessaoVotacaoControllerIT extends IntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void naoDeveAbrirSessaoComDuracaoAbaixoDoMinimo() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+        SessaoVotacaoRequest request = new SessaoVotacaoRequest(4);
+
+        mockMvc.perform(post("/pautas/{pautaId}/sessoes", pauta.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.codigo").value(DuracaoSessaoInvalidaException.CODIGO));
     }
 
     @Test

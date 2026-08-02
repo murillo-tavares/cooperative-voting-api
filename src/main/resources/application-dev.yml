@@ -12,6 +12,7 @@ spring:
 votacao:
   sessao:
     duracao-padrao-segundos: 60
+    duracao-minima-segundos: 5
 
 integracao:
   random-org:

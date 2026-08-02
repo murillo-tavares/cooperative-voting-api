@@ -41,9 +41,7 @@ public class SessaoVotacaoService {
      * violação vira exceção via {@link ConstraintViolationTranslator}.
      */
     public SessaoVotacao abrir(Pauta pauta, int duracaoSegundos) {
-        if (duracaoSegundos <= 0) {
-            throw new IllegalArgumentException("duracaoSegundos deve ser positivo: " + duracaoSegundos);
-        }
+        sessaoVotacaoProperties.requireDuracaoValida(duracaoSegundos);
 
         LocalDateTime abertura = LocalDateTime.now();
         SessaoVotacao sessao = SessaoVotacao.builder()
