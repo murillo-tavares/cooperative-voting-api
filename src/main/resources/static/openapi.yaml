@@ -380,7 +380,7 @@ components:
       properties:
         associadoId:
           type: string
-          description: "Identificador único do associado (ex.: CPF)"
+          description: "CPF do associado (obrigatório, precisa ser um CPF válido, com dígitos verificadores corretos)"
           example: "52998224725"
         opcao:
           type: string

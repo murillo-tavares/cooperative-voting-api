@@ -193,7 +193,7 @@
                 { "key": "pautaId", "value": "{{pautaId}}" }
               ]
             },
-            "description": "Registra o voto de `associadoId` na sessão de votação da pauta salva em `pautaId`. Ao receber 201, salva o `sessaoId` retornado na variável de environment `sessaoId`."
+            "description": "Registra o voto de `associadoId` na sessão de votação da pauta salva em `pautaId`. `associadoId` precisa ser um CPF válido (dígitos verificadores corretos), senão a API responde 400. Ao receber 201, salva o `sessaoId` retornado na variável de environment `sessaoId`."
           },
           "response": []
         }

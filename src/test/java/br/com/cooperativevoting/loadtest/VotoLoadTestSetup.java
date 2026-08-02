@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import net.datafaker.Faker;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,7 +15,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -46,11 +46,15 @@ class VotoLoadTestSetup {
         post("/pautas/" + pautaId + "/sessoes", sessao);
     }
 
-    /** Feeder infinito de associadoId únicos, um por usuário virtual. */
+    /**
+     * Feeder infinito de associadoId únicos, um por usuário virtual. Precisam ser CPFs
+     * válidos: a API valida o formato ({@code @CPF} em {@code VotoRequest.associadoId}).
+     * CPF gerado pelo Datafaker, sem formatação (só dígitos).
+     */
     Iterator<Map<String, Object>> associados() {
-        AtomicInteger seq = new AtomicInteger();
+        Faker faker = new Faker();
         return Stream.generate((Supplier<Map<String, Object>>) () ->
-                Map.of("associadoId", String.format("%011d", seq.incrementAndGet()))
+                Map.of("associadoId", faker.cpf().valid(false))
         ).iterator();
     }
 

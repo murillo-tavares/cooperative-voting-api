@@ -70,7 +70,7 @@ class VotoControllerIT extends IntegrationTest {
     void deveRegistrarVoto() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
-        VotoRequest request = new VotoRequest("11111111111", SimNao.SIM);
+        VotoRequest request = new VotoRequest("10000000108", SimNao.SIM);
 
         mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ class VotoControllerIT extends IntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.pautaId").value(pauta.getId().toString()))
                 .andExpect(jsonPath("$.sessaoId").value(sessao.getId().toString()))
-                .andExpect(jsonPath("$.associadoId").value("11111111111"))
+                .andExpect(jsonPath("$.associadoId").value("10000000108"))
                 .andExpect(jsonPath("$.opcao").value("SIM"))
                 .andExpect(jsonPath("$.dataVoto").exists());
     }
@@ -96,9 +96,22 @@ class VotoControllerIT extends IntegrationTest {
     }
 
     @Test
+    void naoDeveRegistrarVotoComAssociadoIdQueNaoEhCpfValido() throws Exception {
+        Pauta pauta = pautaTestDataFactory.persistirPauta();
+        sessaoVotacaoService.abrir(pauta);
+        VotoRequest request = new VotoRequest("12345678901", SimNao.SIM);
+
+        mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0].field").value("associadoId"));
+    }
+
+    @Test
     void naoDeveRegistrarVotoParaPautaSemSessaoAberta() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
-        VotoRequest request = new VotoRequest("11111111111", SimNao.SIM);
+        VotoRequest request = new VotoRequest("10000000108", SimNao.SIM);
 
         mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,7 +129,7 @@ class VotoControllerIT extends IntegrationTest {
                 .dataAbertura(abertura)
                 .dataFechamento(abertura.plusMinutes(1))
                 .build());
-        VotoRequest request = new VotoRequest("11111111111", SimNao.SIM);
+        VotoRequest request = new VotoRequest("10000000108", SimNao.SIM);
 
         mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +142,7 @@ class VotoControllerIT extends IntegrationTest {
     void naoDeveRegistrarVotoDuplicadoDoMesmoAssociado() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         sessaoVotacaoService.abrir(pauta);
-        VotoRequest request = new VotoRequest("11111111111", SimNao.SIM);
+        VotoRequest request = new VotoRequest("10000000108", SimNao.SIM);
 
         mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +161,7 @@ class VotoControllerIT extends IntegrationTest {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         sessaoVotacaoService.abrir(pauta);
         when(votoAptidaoClient.podeVotar(any())).thenReturn(false);
-        VotoRequest request = new VotoRequest("11111111111", SimNao.SIM);
+        VotoRequest request = new VotoRequest("10000000108", SimNao.SIM);
 
         mockMvc.perform(post("/pautas/{pautaId}/votos", pauta.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -163,9 +176,9 @@ class VotoControllerIT extends IntegrationTest {
     void deveApurarResultadoAprovado() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
-        votoService.votar(sessao, "11111111111", SimNao.SIM);
-        votoService.votar(sessao, "22222222222", SimNao.SIM);
-        votoService.votar(sessao, "33333333333", SimNao.NAO);
+        votoService.votar(sessao, "10000000108", SimNao.SIM);
+        votoService.votar(sessao, "20000000299", SimNao.SIM);
+        votoService.votar(sessao, "30000000388", SimNao.NAO);
 
         mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
                 .andExpect(status().isOk())
@@ -180,9 +193,9 @@ class VotoControllerIT extends IntegrationTest {
     void deveApurarResultadoReprovado() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
-        votoService.votar(sessao, "11111111111", SimNao.NAO);
-        votoService.votar(sessao, "22222222222", SimNao.NAO);
-        votoService.votar(sessao, "33333333333", SimNao.SIM);
+        votoService.votar(sessao, "10000000108", SimNao.NAO);
+        votoService.votar(sessao, "20000000299", SimNao.NAO);
+        votoService.votar(sessao, "30000000388", SimNao.SIM);
 
         mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
                 .andExpect(status().isOk())
@@ -195,8 +208,8 @@ class VotoControllerIT extends IntegrationTest {
     void deveApurarResultadoEmpateComVotos() throws Exception {
         Pauta pauta = pautaTestDataFactory.persistirPauta();
         SessaoVotacao sessao = sessaoVotacaoService.abrir(pauta);
-        votoService.votar(sessao, "11111111111", SimNao.SIM);
-        votoService.votar(sessao, "22222222222", SimNao.NAO);
+        votoService.votar(sessao, "10000000108", SimNao.SIM);
+        votoService.votar(sessao, "20000000299", SimNao.NAO);
 
         mockMvc.perform(get("/pautas/{pautaId}/resultado", pauta.getId()))
                 .andExpect(status().isOk())
