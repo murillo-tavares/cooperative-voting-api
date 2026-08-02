@@ -5,6 +5,28 @@ Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [1.2.0] - 2026-08-01
+
+### Added
+- Validação de duração mínima na abertura de sessão de votação
+  (`votacao.sessao.duracao-minima-segundos`, padrão 5s).
+- Logs de aplicação: erros de negócio, votos registrados, sessões abertas, e um log por
+  requisição (método, URI, status, duração).
+- Teste de carga com Gatling (`VotoSimulation`), simulando votação concorrente numa pauta.
+- Dockerfile e serviço da API no Docker Compose; configuração de produção
+  (`application.yml`) via variáveis de ambiente.
+
+### Changed
+- Todas as rotas passam a viver sob o prefixo `/api/v1` (estratégia de versionamento da
+  API). Quebra clientes que ainda chamam os caminhos antigos sem o prefixo.
+
+### Fixed
+- `openapi.yaml` servido com `Content-Type: application/octet-stream`, quebrando o
+  carregamento da spec no Scalar/Swagger UI; corrigido também um erro de sintaxe YAML na
+  própria spec.
+
+[1.2.0]: https://github.com/murillo-tavares/cooperative-voting-api/releases/tag/v1.2.0
+
 ## [1.1.0] - 2026-08-01
 
 ### Added
