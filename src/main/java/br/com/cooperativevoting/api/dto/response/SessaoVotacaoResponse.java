@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Dados de saída de uma sessão de votação. Reaproveita {@link StatusSessao}:
- * é só vocabulário (sem persistência/comportamento), não custa acoplar API a ele.
+ * Dados de saída de uma sessão de votação.
  */
 public record SessaoVotacaoResponse(
         UUID pautaId,

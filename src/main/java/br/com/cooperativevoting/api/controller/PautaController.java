@@ -43,7 +43,7 @@ public class PautaController {
         return pautaMapper.toResponse(pautaCriada);
     }
 
-    /** Lista pautas com paginação e filtros por data de criação. */
+    /** Lista pautas com paginação e filtros. */
     @GetMapping
     public Page<PautaResponse> listar(Pageable pageable, PautaFilter filtro) {
         Page<Pauta> pautas = pautaService.listar(pageable, filtro);

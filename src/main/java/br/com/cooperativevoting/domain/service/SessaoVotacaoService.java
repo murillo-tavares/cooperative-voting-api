@@ -37,10 +37,8 @@ public class SessaoVotacaoService {
     /**
      * Abre uma sessão de votação para a pauta com duração explícita, em segundos.
      * <p>
-     * A unicidade de sessão por pauta não é validada com um SELECT prévio: sob concorrência,
-     * duas requisições passariam no check e ambas tentariam inserir. A constraint
-     * {@code uk_sessao_votacao_pauta} do banco é a fonte de verdade; a violação é traduzida
-     * para exceção de negócio pelo {@link ConstraintViolationTranslator}.
+     * Sem SELECT prévio pra checar duplicidade: {@code uk_sessao_votacao_pauta} garante, e a
+     * violação vira exceção via {@link ConstraintViolationTranslator}.
      */
     public SessaoVotacao abrir(Pauta pauta, int duracaoSegundos) {
         if (duracaoSegundos <= 0) {
@@ -63,7 +61,11 @@ public class SessaoVotacaoService {
         }
     }
 
-    /** Busca a sessão de votação da pauta. Lança 404 se nenhuma sessão tiver sido aberta para ela. */
+    /**
+     * Busca a sessão de votação da pauta.
+     *
+     * @throws SessaoVotacaoNaoEncontradaException se nenhuma sessão tiver sido aberta para ela
+     */
     public SessaoVotacao buscarPorPautaId(UUID pautaId) {
         return sessaoVotacaoRepository.findOne(SessaoVotacaoSpecifications.comPautaId(pautaId))
                 .orElseThrow(() -> SessaoVotacaoNaoEncontradaException.pautaId(pautaId));

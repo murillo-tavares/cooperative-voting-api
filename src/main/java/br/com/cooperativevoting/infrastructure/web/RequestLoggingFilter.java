@@ -12,8 +12,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * Loga cada request recebida — método, URI, status de resposta e duração — num único
- * evento por requisição, como um access log mínimo.
+ * Loga cada request recebida: método, URI, status de resposta e duração,
+ * num único evento por requisição, como um access log mínimo.
  */
 @Component
 class RequestLoggingFilter extends OncePerRequestFilter {

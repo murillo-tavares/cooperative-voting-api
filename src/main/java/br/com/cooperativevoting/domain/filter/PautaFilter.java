@@ -8,9 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDateTime;
 
 /**
- * Filtros aceitos na listagem de {@link Pauta}. Chega pronto do controller (um campo por
- * parâmetro de query) e se resolve para uma única {@link Specification} — quem consome não
- * precisa conhecer {@link PautaSpecifications} nem {@link SpecificationBuilder}.
+ * Filtros aceitos na listagem de {@link Pauta}.
+ * Se resolve para uma única {@link Specification}.
  */
 public record PautaFilter(
         LocalDateTime dataCriacaoMaior,

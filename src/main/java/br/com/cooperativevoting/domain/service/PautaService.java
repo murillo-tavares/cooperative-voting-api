@@ -39,7 +39,11 @@ public class PautaService {
         return pautaRepository.findAll(filtro.toSpecification(), pageable);
     }
 
-    /** Busca uma pauta pelo id. Lança 404 se não existir. */
+    /**
+     * Busca uma pauta pelo id.
+     *
+     * @throws PautaNaoEncontradaException se não existir
+     */
     public Pauta buscarPorId(UUID id) {
         return pautaRepository.findById(id).orElseThrow(() -> PautaNaoEncontradaException.id(id));
     }

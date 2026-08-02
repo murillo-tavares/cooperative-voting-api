@@ -32,7 +32,7 @@ import java.util.UUID;
 @Builder
 public class SessaoVotacao {
 
-    /** UUID gerado em memória (não sequencial, não adivinhável) — é o próprio identificador público. */
+    /** UUID gerado em memória (não sequencial, não adivinhável). */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -49,19 +49,17 @@ public class SessaoVotacao {
     private LocalDateTime dataFechamento;
 
     /**
-     * Não é coluna, calculado uma vez (na carga ou na criação) e cacheado aqui, pra
-     * getStatus() ser imutável dentro do ciclo de vida do objeto — chamadas
-     * repetidas no mesmo objeto sempre retornam o mesmo valor, mesmo que o tempo passe.
-     * Sem setter: ninguém de fora pode sobrescrever o valor calculado.
+     * Calculado uma vez (na carga ou na criação) e cacheado aqui.
+     * getStatus() é imutável dentro do ciclo de vida do objeto.
      */
     @Transient
     @Setter(AccessLevel.NONE)
     private StatusSessao status;
 
     /**
-     * Validação fica em memória, não no banco: uma restrição no banco (ex.: CHECK contra o
-     * horário atual) rejeitaria operações iniciadas dentro da janela válida mas que terminam
-     * depois dela por lentidão/delay.
+     * Status não vem de um CHECK no banco: comparar direto contra o horário atual seria
+     * instável, um voto iniciado dentro do prazo pode só terminar de processar depois dele
+     * fechar.
      */
     @PostLoad
     @PostPersist

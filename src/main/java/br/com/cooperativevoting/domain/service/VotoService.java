@@ -28,7 +28,7 @@ public class VotoService {
     private final ConstraintViolationTranslator constraintViolationTranslator;
 
     /**
-     * Sem SELECT prévio pra checar duplicidade — {@code uk_voto_pauta_associado} garante,
+     * Sem SELECT prévio pra checar duplicidade: {@code uk_voto_pauta_associado} garante,
      * e a violação vira exceção via {@link ConstraintViolationTranslator}.
      */
     public Voto votar(SessaoVotacao sessao, String associadoId, SimNao opcao) {

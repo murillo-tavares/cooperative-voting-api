@@ -33,7 +33,7 @@ import java.util.UUID;
 @Builder
 public class Pauta {
 
-    /** UUID gerado em memória (não sequencial, não adivinhável) — é o próprio identificador público. */
+    /** UUID gerado em memória (não sequencial, não adivinhável). */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

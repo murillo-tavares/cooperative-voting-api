@@ -11,11 +11,11 @@ API de votação cooperativa — cadastro de pautas, sessões de votação e apu
 
 ## 🚀 Como executar
 
+Sobe Postgres + API em `http://localhost:8080`:
+
 ```bash
 docker compose up --build
 ```
-
-Sobe Postgres + API em `http://localhost:8080`.
 
 Alternativa rodando a API localmente (IDE/debug), só o banco em container:
 
@@ -24,55 +24,62 @@ docker compose up postgres -d
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
+> ⚠️ O desafio pede integração com `user-info.herokuapp.com` (Tarefa Bônus 1), mas esse serviço não existe mais
+> (Heroku encerrou o plano free). Uso o random.org como substituto: mesmo papel na aplicação (aprova ou recusa o
+> voto por chamada externa), serviço diferente.
+
 ## 📖 Documentação
 
-A spec fica em um arquivo próprio — [openapi.yaml](src/main/resources/static/openapi.yaml) ↗ — em vez de gerada a
-partir de anotação em controller. Decisão consciente: mantém o código do controller limpo, sem anotação de
-documentação misturada com lógica de negócio, e deixa a descrição dos endpoints (texto, exemplos, formatação)
-livre pra ser customizada sem precisar tocar em código Java.
+A spec fica em [openapi.yaml](src/main/resources/static/openapi.yaml) ↗, um arquivo próprio em vez de gerada por
+anotação no controller. **Decisão:** controller fica limpo, e a doc é livre 
+pra customizar sem mexer em Java.
 
 - 🧭 Swagger UI: [http://localhost:8080/api/v1/swagger-ui/index.html](http://localhost:8080/api/v1/swagger-ui/index.html) ↗
-- 🌀 Scalar (alternativa ao Swagger, mesma spec): [http://localhost:8080/api/v1/scalar.html](http://localhost:8080/api/v1/scalar.html) ↗
-- 📄 Spec crua: [http://localhost:8080/api/v1/openapi.yaml](http://localhost:8080/api/v1/openapi.yaml) ↗
+- 🌀 Scalar (alternativa): [http://localhost:8080/api/v1/scalar.html](http://localhost:8080/api/v1/scalar.html) ↗
+- 📄 Spec: [http://localhost:8080/api/v1/openapi.yaml](http://localhost:8080/api/v1/openapi.yaml) ↗
 
 ## 🏷️ Versionamento
 
-Cada versão publicada segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) ↗ e
-[Semantic Versioning](https://semver.org/lang/pt-BR/) ↗, com uma tag `vX.Y.Z` correspondente no repositório.
+API versionada por path (`/api/v1`).
+
+Releases seguem [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) ↗ e
+[Semantic Versioning](https://semver.org/lang/pt-BR/) ↗, com tag `vX.Y.Z` no repositório.
 
 - 📝 Changelog: [CHANGELOG.md](CHANGELOG.md) ↗
 - 🚀 Releases: [github.com/murillo-tavares/cooperative-voting-api/releases](https://github.com/murillo-tavares/cooperative-voting-api/releases) ↗
 
 ## 🧪 Testes
 
-Suíte dividida entre testes unitários e de integração, marcados respectivamente pelas interfaces
-[UnitTest](src/test/java/br/com/cooperativevoting/support/suite/UnitTest.java) ↗ (`@Tag("unit")`) e
-[IntegrationTest](src/test/java/br/com/cooperativevoting/support/suite/IntegrationTest.java) ↗ (`@Tag("integration")`).
-Integração sobe banco real via Testcontainers — precisa Docker rodando.
+### Teste unitário
+
+Rápido, sem infra:
 
 ```bash
-./mvnw test  # unitário: rápido, sem infra
+./mvnw test
 ```
+
+### Teste de integração
+
+Sobe banco real via Testcontainers. Precisa de **Docker rodando**:
 
 ```bash
-./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration  # integração: banco via Testcontainers (Docker)
+./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration
 ```
 
-### 🔥 Carga
+### 🔥 Teste de carga
 
 [VotoSimulation](src/test/java/br/com/cooperativevoting/loadtest/VotoSimulation.java) ↗ (Gatling) sobe uma pauta,
-abre sessão e simula 200 usuários votando concorrentemente. Precisa da API rodando com o profile `loadtest` ativo
-(cliente de aptidão fake, sem depender do random.org):
-
-> ⚠️ **A integração com sistema externo (random.org, Tarefa Bônus 1) é o maior gargalo de tempo de resposta do
-> fluxo de voto.** Medido diretamente: média de ~387ms por chamada, chegando a ~690ms — contra poucos ms do resto
-> da aplicação. Por isso o teste de carga usa um cliente fake no lugar do random.org: sem isso, o resultado mediria
-> a latência do random.org, não da aplicação em si.
+abre sessão e simula 200 usuários votando ao mesmo tempo. Precisa da **API rodando** com o profile `loadtest`
+ativo (cliente de aptidão fake, não depende do random.org):
 
 ```bash
 SPRING_PROFILES_ACTIVE=loadtest docker compose up -d --build app
 ./mvnw gatling:test -DbaseUrl=http://localhost:8080/api/v1
 ```
+
+> ⚠️ A integração externa (random.org) é o maior gargalo de latência do fluxo de voto: média de ~387ms por
+> chamada, chegando a ~690ms. Por isso o teste de carga usa o cliente fake em vez do random.org de verdade,
+> senão o resultado mediria a latência do random.org, não da aplicação.
 
 ## 🏗️ Arquitetura
 
@@ -80,45 +87,45 @@ SPRING_PROFILES_ACTIVE=loadtest docker compose up -d --build app
 
 Mapeamento entre [DTO](src/main/java/br/com/cooperativevoting/api/dto) ↗ e
 [domínio](src/main/java/br/com/cooperativevoting/domain/model) ↗ é gerado em build time pelo
-[MapStruct](src/main/java/br/com/cooperativevoting/api/mapper) ↗ — sem código manual de conversão pra escrever ou
-manter; atualizar um campo é só mexer na interface do mapper.
+[MapStruct](src/main/java/br/com/cooperativevoting/api/mapper) ↗. Sem conversão manual pra escrever ou manter:
+mudar um campo é só mexer na interface do mapper.
 
-No controller, o DTO nunca escapa da camada web: chega como JSON, o mapper converte pra entidade de domínio antes
-de chegar no service; na volta, o mapper converte a entidade de volta pra DTO antes de virar JSON de novo.
+No controller o DTO nunca escapa da camada web. Chega como JSON, o mapper converte pra entidade de domínio antes
+do service; na volta, converte de novo antes de virar JSON.
 
 <img src="docs/diagrams/mapstruct-fluxo.svg" alt="Diagrama de sequência: Client -> Controller -> Mapper -> Service e volta" width="820">
 
 ### 🚨 Tratamento de erros
 
 Cada erro de negócio tem sua própria [exception](src/main/java/br/com/cooperativevoting/domain/exception) ↗, com
-status, mensagem e código únicos, capturada globalmente pelo
-[GlobalExceptionHandler](src/main/java/br/com/cooperativevoting/api/exception/GlobalExceptionHandler.java) ↗ via
-Zalando Problem — catálogo autodocumentado e testável pelo código, sem depender de texto de mensagem.
+status, mensagem e código únicos. O
+[GlobalExceptionHandler](src/main/java/br/com/cooperativevoting/api/exception/GlobalExceptionHandler.java) ↗
+captura tudo via Zalando Problem: um catálogo autodocumentado e testável pelo código, sem depender de texto solto.
 
-Violação de constraint do banco (ex.: sessão duplicada) segue **strategy + map**: o `INSERT` é otimista — um
-`SELECT` prévio não seguraria concorrência —, e se a constraint falhar, o
+Violação de constraint do banco (ex.: sessão duplicada) usa **strategy + map**. O `INSERT` é otimista (um
+`SELECT` prévio não seguraria concorrência); se a constraint falhar, o
 [ConstraintViolationTranslator](src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationTranslator.java) ↗
-busca num `Map<constraintName, Mapper>` qual
+busca no `Map<constraintName, Mapper>` qual
 [ConstraintViolationMapper](src/main/java/br/com/cooperativevoting/domain/exception/constraint/ConstraintViolationMapper.java) ↗
-sabe traduzi-la. Nova constraint = nova implementação, sem tocar no tradutor.
+sabe traduzir. Nova constraint é só nova implementação, sem tocar no tradutor.
 
 <img src="docs/diagrams/erros-fluxo.svg" alt="Diagrama de classes: strategy pattern do tratamento de constraint violation" width="820">
 
 ### 🧩 Filtro + Specification
 
-[Filtros](src/main/java/br/com/cooperativevoting/domain/filter) ↗ usam o framework `Specification` do Spring Data
-em vez de query fixa: cada campo filtrável é um critério isolado e reaproveitável em `PautaSpecifications`, e o
-`SpecificationBuilder` combina só os critérios presentes na requisição num único `AND`. Estender é fácil — um
-filtro novo é só mais um critério, sem afetar os existentes nem exigir um método por combinação.
+[Filtros](src/main/java/br/com/cooperativevoting/domain/filter) ↗ usam `Specification` do Spring Data em vez de
+query fixa. Cada campo filtrável é um critério isolado em `PautaSpecifications`, e o `SpecificationBuilder`
+combina só os critérios presentes na requisição num `AND`. Um filtro novo é só mais um critério: não afeta os
+existentes nem pede um método por combinação.
 
-Adicionar um filtro é sempre três passos: um campo no record, um método novo em `PautaSpecifications` e um
-`.addIfPresent(...)` novo em `toSpecification()` — nada existente muda.
+São sempre três passos: campo no record, método novo em `PautaSpecifications` e `.addIfPresent(...)` novo em
+`toSpecification()`. Nada existente muda.
 
 <img src="docs/diagrams/specification-fluxo.svg" alt="Critérios de PautaSpecifications plugados na chain do SpecificationBuilder" width="900">
 
 ### 🪪 Entidade
 
-#### `data_exclusao` — exclusão lógica
+#### Exclusão lógica (`data_exclusao`)
 
 Exclusão é lógica: um `UPDATE` que marca `data_exclusao`, não um `DELETE`. Mantém histórico pra auditoria e
 permite recuperação.

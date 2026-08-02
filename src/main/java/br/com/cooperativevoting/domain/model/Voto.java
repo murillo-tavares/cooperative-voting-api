@@ -38,7 +38,7 @@ public class Voto {
     @Column(name = "pauta_id", nullable = false, updatable = false)
     private UUID pautaId;
 
-    /** Sessão em que o voto foi aceito — janela de tempo específica, não a pauta em si. */
+    /** Sessão (janela de tempo) em que o voto foi aceito. */
     @Column(name = "sessao_id", nullable = false, updatable = false)
     private UUID sessaoId;
 
@@ -53,7 +53,7 @@ public class Voto {
     @Column(name = "data_voto", nullable = false, updatable = false)
     private LocalDateTime dataVoto;
 
-    /** Monta o voto a partir da sessão em que foi aceito — {@code pautaId}/{@code sessaoId} vêm dela. */
+    /** Monta o voto a partir da sessão em que foi aceito. */
     public static Voto novo(SessaoVotacao sessao, String associadoId, SimNao opcao) {
         return Voto.builder()
                 .pautaId(sessao.getPautaId())

@@ -12,7 +12,7 @@ import org.zalando.problem.ThrowableProblem;
 import java.util.List;
 
 /**
- * Formato padrão de erro devolvido pela API. {@code errors} só aparece em erros de validação.
+ * Formato padrão de erro devolvido pela API.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
@@ -24,6 +24,8 @@ public class ErroResponse {
     private final String codigo;
     private final String message;
     private final String path;
+
+    /** Só aparece em erros de validação. */
     private final List<CampoInvalido> errors;
 
     public record CampoInvalido(String field, String message) {

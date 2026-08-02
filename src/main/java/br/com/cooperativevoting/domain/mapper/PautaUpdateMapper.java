@@ -7,7 +7,6 @@ import org.mapstruct.MappingTarget;
 
 /**
  * Aplica os campos editáveis de {@code dadosAtualizados} sobre uma {@link Pauta} já persistida.
- * Só {@code domain} → {@code domain}, sem DTO — mantém o mapper de API isolado da camada de domínio.
  * Campos internos/gerados ficam explicitamente fora do merge para não serem sobrescritos com null.
  */
 @Mapper(componentModel = "spring")

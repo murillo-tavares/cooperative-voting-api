@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Traduz {@link DataIntegrityViolationException} para exceção de negócio, com base na
  * constraint violada no banco. Mapeadores são descobertos automaticamente via injeção de
- * lista do Spring — adicionar um novo caso não exige alterar esta classe.
+ * lista do Spring. Adicionar um novo caso não exige alterar esta classe.
  */
 @Component
 public class ConstraintViolationTranslator {

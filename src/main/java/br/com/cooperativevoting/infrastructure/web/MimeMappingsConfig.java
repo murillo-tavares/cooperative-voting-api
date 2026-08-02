@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * O servidor embarcado não mapeia {@code .yaml}/{@code .yml} por padrão — {@code openapi.yaml}
- * (servido como recurso estático) volta com {@code Content-Type: application/octet-stream},
+ * O servidor embarcado não mapeia {@code .yaml}/{@code .yml} por padrão.
+ * {@code openapi.yaml} (servido como recurso estático) volta com {@code Content-Type: application/octet-stream},
  * o que faz o Scalar/Swagger UI falharem ao carregar a spec via {@code data-url}.
  */
 @Configuration
