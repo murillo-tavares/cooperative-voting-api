@@ -24,10 +24,6 @@ docker compose up postgres -d
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-> ⚠️ O desafio pede integração com `user-info.herokuapp.com` (Tarefa Bônus 1), mas esse serviço não existe mais
-> (Heroku encerrou o plano free). Uso o random.org como substituto: mesmo papel na aplicação (aprova ou recusa o
-> voto por chamada externa), serviço diferente.
-
 ## 📖 Documentação
 
 A spec fica em <a href="src/main/resources/static/openapi.yaml" target="_blank" rel="noopener noreferrer">openapi.yaml</a> ↗, um arquivo próprio em vez de gerada por
@@ -59,15 +55,11 @@ pra customizar sem mexer em Java.
 
 Mais detalhes (import, troca de ambiente) em <a href="docs/postman/README.md" target="_blank" rel="noopener noreferrer">docs/postman/README.md</a> ↗.
 
-## 🏷️ Versionamento
+## 🔌 Integração com sistemas externos ![Tarefa Bônus 1 - Integração com sistemas externos](https://img.shields.io/badge/Tarefa%20B%C3%B4nus%201-Integra%C3%A7%C3%A3o%20com%20sistemas%20externos-orange)
 
-API versionada por path (`/api/v1`).
-
-Releases seguem <a href="https://keepachangelog.com/pt-BR/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a> ↗ e
-<a href="https://semver.org/lang/pt-BR/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a> ↗, com tag `vX.Y.Z` no repositório.
-
-- 📝 Changelog: <a href="CHANGELOG.md" target="_blank" rel="noopener noreferrer">CHANGELOG.md</a> ↗
-- 🚀 Releases: <a href="https://github.com/murillo-tavares/cooperative-voting-api/releases" target="_blank" rel="noopener noreferrer">github.com/murillo-tavares/cooperative-voting-api/releases</a> ↗
+O desafio pede integração com `user-info.herokuapp.com`, mas o serviço está fora do ar.
+Uso o **random.org como substituto** com mesmo papel na aplicação: aprova ou recusa o
+voto de forma aleatória por chamada externa.
 
 ## 🧪 Testes
 
@@ -87,7 +79,7 @@ Sobe banco real via Testcontainers. Precisa de **Docker rodando**:
 ./mvnw test -Dsurefire.excludedGroups= -Dsurefire.groups=integration
 ```
 
-### 🔥 Teste de carga
+### 🔥 Teste de carga ![Tarefa Bônus 2 - Performance](https://img.shields.io/badge/Tarefa%20B%C3%B4nus%202-Performance-orange)
 
 <a href="src/test/java/br/com/cooperativevoting/loadtest/VotoSimulation.java" target="_blank" rel="noopener noreferrer">VotoSimulation</a> ↗ (Gatling) sobe uma pauta,
 abre sessão e simula 200 usuários votando ao mesmo tempo. Precisa da **API rodando** com o profile `loadtest`
@@ -101,6 +93,16 @@ SPRING_PROFILES_ACTIVE=loadtest docker compose up -d --build app
 > ⚠️ A integração externa (random.org) é o maior gargalo de latência do fluxo de voto: média de ~387ms por
 > chamada, chegando a ~690ms. Por isso o teste de carga usa o cliente fake em vez do random.org de verdade,
 > senão o resultado mediria a latência do random.org, não da aplicação.
+
+## 🏷️ Versionamento ![Tarefa Bônus 3 - Versionamento da API](https://img.shields.io/badge/Tarefa%20B%C3%B4nus%203-Versionamento%20da%20API-orange)
+
+API versionada por path (`/api/v1`).
+
+Releases seguem <a href="https://keepachangelog.com/pt-BR/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a> ↗ e
+<a href="https://semver.org/lang/pt-BR/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a> ↗, com tag `vX.Y.Z` no repositório.
+
+- 📝 Changelog: <a href="CHANGELOG.md" target="_blank" rel="noopener noreferrer">CHANGELOG.md</a> ↗
+- 🚀 Releases: <a href="https://github.com/murillo-tavares/cooperative-voting-api/releases" target="_blank" rel="noopener noreferrer">github.com/murillo-tavares/cooperative-voting-api/releases</a> ↗
 
 ## 🏗️ Arquitetura
 
