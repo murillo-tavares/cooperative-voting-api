@@ -34,9 +34,22 @@ A spec fica em [openapi.yaml](src/main/resources/static/openapi.yaml) ↗, um ar
 anotação no controller. **Decisão:** controller fica limpo, e a doc é livre 
 pra customizar sem mexer em Java.
 
+- 🧭 Swagger UI: [https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html](https://cooperative-voting-api.onrender.com/api/v1/swagger-ui/index.html) ↗
+- 🌀 Scalar (alternativa): [https://cooperative-voting-api.onrender.com/api/v1/scalar.html](https://cooperative-voting-api.onrender.com/api/v1/scalar.html) ↗
+- 📄 Spec: [https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml](https://cooperative-voting-api.onrender.com/api/v1/openapi.yaml) ↗
+
+> ⚠️ Hospedado no plano free do Render: a instância dorme por inatividade e o primeiro acesso após um tempo sem
+> uso pode demorar cerca de 1 minuto pra subir. Além disso, por se tratar de um ambiente gratuito, é normal haver 
+> uma latência um pouco maior nas requisições em comparação com serviços em produção.
+
+<details>
+<summary>Local (localhost:8080)</summary>
+
 - 🧭 Swagger UI: [http://localhost:8080/api/v1/swagger-ui/index.html](http://localhost:8080/api/v1/swagger-ui/index.html) ↗
 - 🌀 Scalar (alternativa): [http://localhost:8080/api/v1/scalar.html](http://localhost:8080/api/v1/scalar.html) ↗
 - 📄 Spec: [http://localhost:8080/api/v1/openapi.yaml](http://localhost:8080/api/v1/openapi.yaml) ↗
+
+</details>
 
 ## 🏷️ Versionamento
 
