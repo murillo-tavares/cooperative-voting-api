@@ -51,6 +51,14 @@ pra customizar sem mexer em Java.
 
 </details>
 
+### 📮 Postman
+
+- [cooperative-voting-api.postman_collection.json](docs/postman/cooperative-voting-api.postman_collection.json) ↗
+- [cooperative-voting-api.local.postman_environment.json](docs/postman/cooperative-voting-api.local.postman_environment.json) ↗
+- [cooperative-voting-api.render.postman_environment.json](docs/postman/cooperative-voting-api.render.postman_environment.json) ↗
+
+Mais detalhes (import, troca de ambiente) em [docs/postman/README.md](docs/postman/README.md) ↗.
+
 ## 🏷️ Versionamento
 
 API versionada por path (`/api/v1`).

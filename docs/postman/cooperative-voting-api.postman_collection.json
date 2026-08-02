@@ -1,0 +1,232 @@
+{
+  "info": {
+    "_postman_id": "b7a72184-6b39-4621-9aa3-9c5efed94310",
+    "name": "Cooperative Voting API",
+    "description": "API de votação cooperativa — cadastro de pautas, sessões de votação, votos e apuração de resultado.\n\nGerado a partir de `src/main/resources/static/openapi.yaml`.\n\nUse o environment \"Cooperative Voting API - Local\" junto com esta collection: as requisições de criação (criar pauta, abrir sessão, registrar voto) têm um script de teste que salva o id retornado nas variáveis do environment (`pautaId`, `sessaoId`), então as demais requisições já usam `{{pautaId}}` / `{{sessaoId}}` sem precisar copiar e colar nada.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Pauta",
+      "item": [
+        {
+          "name": "Criar pauta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.id) {",
+                  "        pm.environment.set(\"pautaId\", jsonData.id);",
+                  "        console.log(\"pautaId salvo no environment:\", jsonData.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Alterar estatuto social\",\n  \"descricao\": \"Proposta de alteração do estatuto social da cooperativa\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pautas",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas"]
+            },
+            "description": "Cadastra uma nova pauta. Ao receber 201, salva o `id` retornado na variável de environment `pautaId`."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pautas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pautas?page=0&size=20&sort=dataCriacao,desc&dataCriacaoMaior=&dataCriacaoMenor=",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "sort", "value": "dataCriacao,desc" },
+                { "key": "dataCriacaoMaior", "value": "", "disabled": true },
+                { "key": "dataCriacaoMenor", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Lista pautas com paginação e filtros opcionais por data de criação."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pauta por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Busca a pauta cujo id está salvo na variável `pautaId` (setada automaticamente por \"Criar pauta\")."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar pauta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Alterar estatuto social (revisado)\",\n  \"descricao\": \"Proposta revisada de alteração do estatuto social da cooperativa\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Atualiza a pauta salva em `pautaId`."
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir pauta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Exclui (logicamente) a pauta salva em `pautaId`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sessão de Votação",
+      "item": [
+        {
+          "name": "Abrir sessão de votação",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"duracaoSegundos\": 60\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId/sessoes",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId", "sessoes"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Abre uma sessão de votação para a pauta salva em `pautaId`. Corpo é opcional; sem `duracaoSegundos` a sessão fica aberta por 1 minuto."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Voto",
+      "item": [
+        {
+          "name": "Registrar voto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.sessaoId) {",
+                  "        pm.environment.set(\"sessaoId\", jsonData.sessaoId);",
+                  "        console.log(\"sessaoId salvo no environment:\", jsonData.sessaoId);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"associadoId\": \"52998224725\",\n  \"opcao\": \"SIM\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId/votos",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId", "votos"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Registra o voto de `associadoId` na sessão de votação da pauta salva em `pautaId`. Ao receber 201, salva o `sessaoId` retornado na variável de environment `sessaoId`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Resultado",
+      "item": [
+        {
+          "name": "Apurar resultado da votação",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pautas/:pautaId/resultado",
+              "host": ["{{baseUrl}}"],
+              "path": ["pautas", ":pautaId", "resultado"],
+              "variable": [
+                { "key": "pautaId", "value": "{{pautaId}}" }
+              ]
+            },
+            "description": "Contabiliza os votos da pauta salva em `pautaId` e devolve o resultado (pode ser parcial, se a sessão ainda estiver aberta)."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    }
+  ]
+}
